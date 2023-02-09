@@ -9,6 +9,7 @@ function TinderCards() {
   useEffect(() => {
     const unsubscribe = database
       .collection("people")
+      .orderBy("name", "desc")
       .onSnapshot((snapshot) =>
         setPeople(snapshot.docs.map((doc) => doc.data()))
       );
