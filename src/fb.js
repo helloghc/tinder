@@ -1,8 +1,8 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
-export const firebaseConfig = {
+export const fbase = {
     "projectId": "tinderclone-3d015",
     "appId": "1:309235698223:web:23ca6745f5c9cad549d4da",
     "storageBucket": "tinderclone-3d015.appspot.com",
@@ -10,9 +10,3 @@ export const firebaseConfig = {
     "authDomain": "tinderclone-3d015.firebaseapp.com",
     "messagingSenderId": "309235698223"
 };
-
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-
-const database = firebaseApp.firestore();
-
-export default database;
