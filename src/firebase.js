@@ -1,14 +1,16 @@
 import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+import { getAuth } from 'firebase/auth';
+import { getStorage, ref, uploadbytes, getDownloadURL, getBytes } from 'firebase/storage';
+import { getFirestore, collection, addDoc, getDocs, doc, getDoc, query, where, setDoc } from 'firebase/firestore';
 import 'firebase/compat/firestore';
 
 export const firebaseConfig = {
-    "projectId": "tinderclone-3d015",
-    "appId": "1:309235698223:web:23ca6745f5c9cad549d4da",
-    "storageBucket": "tinderclone-3d015.appspot.com",
-    "apiKey": "AIzaSyB0Ljn9h4XMgoAJ3oMgiG18kASbwfH0Me8",
-    "authDomain": "tinderclone-3d015.firebaseapp.com",
-    "messagingSenderId": "309235698223"
+    apiKey: process.env.REACT_APP_APIKEY,
+    authDomain: process.env.REACT_APP_AUTHDOMAIN,
+    projectId: process.env.REACT_APP_PROJECTID,
+    storageBucket: process.env.REACT_APP_STORAGEBUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
+    appId: process.env.REACT_APP_APPID
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);

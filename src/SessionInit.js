@@ -1,6 +1,5 @@
 import React from "react";
 import "./SessionInit.css";
-import {fbase} from "./fb";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 const SessionInit = (props) => {
@@ -40,6 +39,7 @@ const SessionInit = (props) => {
 
   return <div className="session">
     <div className="form-session">
+      <p>{process.env.REACT_APP_SALUDO}</p>
       <form className="form-container" onSubmit={submitHandler}>
         <h1>{isSignUp ? "Registrarte" : "Iniciar Sesión"}</h1>
         <div className="wrap">

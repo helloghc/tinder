@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import SwipeButtons from "./SwipeButtons";
 import Chats from "./Chats";
 import ChatScreen from "./ChatScreen";
-import {fbase} from "./fb";
+
 
 function AppSession() {
   return (
