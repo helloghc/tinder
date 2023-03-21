@@ -1,7 +1,5 @@
 import React, {useEffect} from "react";
-import AppSession from "./AppSession";
-import SessionInit from "./SessionInit";
-import "./App.css"
+import "./App.css" 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function App() {
@@ -9,15 +7,15 @@ function App() {
   const auth = getAuth();
 
 
-  const [usuario, setUsuario] = React.useState(null);
-  useEffect(() => {
+  //const [usuario, setUsuario] = React.useState(null);
+  /*useEffect(() => {
     onAuthStateChanged(auth, (firebaseUser) => {
       console.log("ya tienes sesion iniciada con: ", firebaseUser)
       setUsuario(firebaseUser);
     })
-  } , [])
+  } , [])*/
 
-  return <>{ usuario ?  <AppSession/> :  <SessionInit setUsuario={setUsuario} />}</>;
+  return <div>app</div>;
 }
 
 export default App;

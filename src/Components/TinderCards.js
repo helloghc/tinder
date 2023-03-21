@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TinderCard from "react-tinder-card";
 import "./TinderCards.css";
-import database from "./firebase";
+import {database} from "../Api/firebase.js"; //Recordar como importar y enlazar como en el video
 
 function TinderCards() {
   const [people, setPeople] = useState([]);

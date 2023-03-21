@@ -1,0 +1,10 @@
+body{
+    min-height: 100%;
+}
+
+.profile {
+  display: flex;
+  justify-content: center;
+  margin-top: 5vh;
+}
+

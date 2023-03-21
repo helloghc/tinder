@@ -15,6 +15,17 @@ export const firebaseConfig = {
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-const database = firebaseApp.firestore();
 
-export default database;
+
+
+export const authForGoogle = getAuth(firebaseApp);
+export const auth = getAuth(firebaseApp);
+export const database = firebaseApp.firestore();
+export const storage = getStorage(firebaseApp);
+
+export async function userExist(uid){
+    const docRef = doc(database, 'people', uid);
+    const res = await getDoc(docRef)
+    console.log(res);
+    return res.exists();
+}
