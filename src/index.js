@@ -18,18 +18,18 @@ import ChooseUsernameView from './routes/ChooseUsernameView'
 ReactDOM.render(
       <BrowserRouter>
         <Switch>
-          <Route path="/chat/:person">
+          <Route exact path="/chat/:person">
             <Header backButton="/chat" />
             <ChatScreen/>
           </Route>
-          <Route path="/chat">
+          <Route exact path="/chat">
             <Header backButton="/" />
             <Chats />
           </Route>
-          <Route path="/signout">
+          <Route exact path="/signout">
             <SignOutView/>
           </Route>
-          <Route path="/profile">
+          <Route exact path="/profile">
             <Header backButton="/" />
             <ProfileView/>
           </Route>
@@ -37,16 +37,14 @@ ReactDOM.render(
             <Header backButton="/" />
             <PublicProfileView/>
           </Route>
-          <Route path="/choose-username">
+          <Route exact path="/choose-username">
             <ChooseUsernameView/>
           </Route>
           <Route path="/login">
             <LoginView/>
           </Route>
           <Route path="/">
-            <Header />
             <TinderCards />
-            <SwipeButtons />
           </Route>
         </Switch>
       </BrowserRouter>,

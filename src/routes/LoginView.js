@@ -1,47 +1,51 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom"
 import "./LoginView.css";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import database, { authForGoogle, userExist } from "../Api/firebase.js";
+import database, { authForGoogle, userExist, auth } from "../Api/firebase.js";
+import AuthProvider from "src/Components/authProvider";
  
 
 
 const LoginView = (props) => {
-
-
-  const [currentUser, setCurrentUser] = useState(null);
+  const history = useHistory();
+  //const [currentUser, setCurrentUser] = useState(null);
   /*
   State 0: Inicializado
   1: Loading
   2: Login Completo
   3: Login sin registro
   4: No hay nadie logueado
+  5: ya existe username
+  6: nuevo username listo, redireccionar.
   */
   const [currentState, setCurrentState] = useState(0);
 
   const [isSignUp, setIsSignUp] = React.useState(false);
-  const auth = getAuth();
 
-  useEffect(() => {
+  /*useEffect(() => {
     setCurrentState(1);
-    onAuthStateChanged(auth, handleUserStateChanged);
-  } , [])
-  async function handleUserStateChanged(user){
-    if(user){
-      const isRegistered = await userExist(user.uid);
-      if(isRegistered){
-        setCurrentState(2);
-      } else {
+    onAuthStateChanged(auth, async (user) => {
+      if(user){
+        const isRegistered = await userExist(user.uid);
+        if(isRegistered){
+          history.push('/');
+          setCurrentState(2);
+        } else {
+          history.push('/choose-username');
+          setCurrentState(3);
+        }
         setCurrentState(3);
+  
+      } else {
+        setCurrentState(4);
+        console.log('No hay nadie autenticado...');
       }
-      setCurrentState(3);
+    });
+  } , [history]);*/
 
-    } else {
-      setCurrentState(4);
-      console.log('No hay nadie autenticado...');
-    }
-  };
-
+  /* EMAIL Y CONTRASEÑA
   const signUp = (email, password) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((firebaseUser) =>{
@@ -70,7 +74,7 @@ const LoginView = (props) => {
       logIn(email, password);
     }
 
-  };
+  };*/
 
   async function handleOnClick () {
     const googleProvider = new GoogleAuthProvider(); 
@@ -86,16 +90,22 @@ const LoginView = (props) => {
     }
   };
 
-  if(currentState == 2){
-    return <div>Estas autenticado y registrado</div>
-  }
-  if(currentState == 3){
-    return <div>Estas autenticado pero no registrado</div>
-  }
+  function handleUserLoggedIn(user) {
+    history.push('/');
+  };
+
+  function handleUserNotRegistered(user) {
+    history.push('/choose-username')
+  };
+
+  function handleUserNotLoggedIn() {
+    setCurrentState(4);
+  };
+
   if(currentState == 4){
     return  <div className="session">
             <div className="form-session">
-              <form className="form-container" onSubmit={submitHandler}>
+              <form className="form-container" /*onSubmit={submitHandler}*/>
                 <h1>{isSignUp ? "Registrarte" : "Iniciar Sesión"}</h1>
                 <div className="wrap">
                   <p>Correo Electrónico</p>
@@ -117,7 +127,18 @@ const LoginView = (props) => {
             </div>
           </div>;
   }
-  return <div>Loading...</div>
+  if(currentState == 6){
+    history('/');
+  }
+  return (
+    <AuthProvider
+      onUserLoggedIn={handleUserLoggedIn}
+      onUserNotRegistered={handleUserNotRegistered}
+      onUserNotLoggedIn={handleUserNotLoggedIn}
+    >
+      <div>Loading...</div>
+    </AuthProvider>
+  );
 };
 
 export default LoginView;

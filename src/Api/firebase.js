@@ -3,6 +3,7 @@ import { getAuth } from 'firebase/auth';
 import { getStorage, ref, uploadbytes, getDownloadURL, getBytes } from 'firebase/storage';
 import { getFirestore, collection, addDoc, getDocs, doc, getDoc, query, where, setDoc } from 'firebase/firestore';
 import 'firebase/compat/firestore';
+import { async } from '@firebase/util';
 
 export const firebaseConfig = {
     apiKey: process.env.REACT_APP_APIKEY,
@@ -28,4 +29,47 @@ export async function userExist(uid){
     const res = await getDoc(docRef)
     console.log(res);
     return res.exists();
+}
+
+export async function existUsername(username){
+    const users = [];
+    const docsRef = collection(database, 'people');
+    const q = query(docsRef, where(username, '==', username));
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(doc => {
+        users.push(doc.data());
+    });
+
+    return users.length > 0 ? users[0].uid : null;
+}
+
+export async function registerNewUser(user){
+    try{
+        const collectionRef = collection(database, 'people');
+        const docRef = doc(collectionRef, user.uid);
+        await setDoc(docRef, user);
+    }catch(error){
+
+    }
+}
+
+export async function updateUser(user){
+    try {
+        const collectionRef= collection(database, 'people')
+        const docRef = doc(collectionRef,user.uid)
+        await setDoc(docRef, user)
+    } catch (error) {
+        
+    }
+}
+export async function getUserInfo(uid){
+    try {
+        const docRef = doc(database, 'people', uid);
+        const document = await getDoc(docRef)
+        return document.data();
+    } catch (error) {
+        
+    }
 }
