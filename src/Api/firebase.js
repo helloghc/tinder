@@ -1,6 +1,6 @@
 import firebase from 'firebase/compat/app';
 import { getAuth } from 'firebase/auth';
-import { getStorage, ref, uploadbytes, getDownloadURL, getBytes } from 'firebase/storage';
+import { getStorage, ref, uploadBytes, getDownloadURL, getBytes } from 'firebase/storage';
 import { getFirestore, collection, addDoc, getDocs, doc, getDoc, query, where, setDoc } from 'firebase/firestore';
 import 'firebase/compat/firestore';
 import { async } from '@firebase/util';
@@ -72,4 +72,34 @@ export async function getUserInfo(uid){
     } catch (error) {
         
     }
+}
+
+export async function setUserProfilePhoto(uid, file){
+    try {
+        const imageRef = ref(storage, `images/${uid}`);
+        const resUpload = await uploadBytes(imageRef, file);
+        return resUpload;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getProfilePhotoUrl(profilePicture){
+    try {
+        const imageRef = ref(storage, profilePicture);
+        
+        const url = await getDownloadURL(imageRef);
+
+        return url
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getUserPublicProfileInfo(uid){
+    const profileInfo = await getUserInfo(uid);
+
+    return {
+        profileInfo: profileInfo,
+    };
 }

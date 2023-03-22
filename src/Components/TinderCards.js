@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
 import TinderCard from "react-tinder-card";
 import "./TinderCards.css";
-import {database} from "../Api/firebase.js"; //Recordar como importar y enlazar como en el video
+import {database,  getProfilePhotoUrl} from "../Api/firebase.js";
 import Header from "./Header";
 import SwipeButtons from "./SwipeButtons";
 import AuthProvider from "src/Components/authProvider";
 import { useHistory } from "react-router-dom";
-import { set } from "firebase/database";
 
 
 function TinderCards() {
   const [people, setPeople] = useState([]);
   const [currentState, setCurrentState] = useState(0);
   const [currentUser, setCurrentUser] = useState({});
+  const [profileUrl, setProfileUrl] = useState(null);
 
   useEffect(() => {
     const unsubscribe = database
       .collection("people")
-      .orderBy("displayName", "desc")
+      .orderBy("username", "desc")
       .onSnapshot((snapshot) =>
         setPeople(snapshot.docs.map((doc) => doc.data()))
       );
@@ -29,8 +29,10 @@ function TinderCards() {
 
   const history = useHistory();
   
-  function handleUserLoggedIn(user) {
+  async function handleUserLoggedIn(user) {
     setCurrentUser(user);
+    const url = await getProfilePhotoUrl(user.profilePicture);
+    setProfileUrl(url);
     setCurrentState(2);
   }
 
@@ -42,7 +44,7 @@ function TinderCards() {
     history.push('/login');
   }
 
-  if(currentState == 0){
+  if(currentState != 2){
     return (<AuthProvider
       onUserLoggedIn={handleUserLoggedIn}
       onUserNotRegistered={handleUserNotRegistered}
@@ -54,17 +56,17 @@ function TinderCards() {
     <div>
       <Header />  
       <div className="tinderCards__cardContainer">
-        {people.map((person) => (
+        {people.map((user) => (
           <TinderCard
             className="swipe"
-            key={person.displayName}
+            key={user.username}
             preventSwipe={["up", "down"]}
           >
             <div
-              style={{ backgroundImage: `url(${person.url})` }}
+              style={{ backgroundImage: `url(${user.profilePicture})` }}
               className="card"
             >
-              <h3>{person.displayName}</h3>
+              <h3>{user.username}</h3>
             </div>
           </TinderCard>
         ))}

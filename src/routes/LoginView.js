@@ -45,19 +45,17 @@ const LoginView = (props) => {
     });
   } , [history]);*/
 
-  /* EMAIL Y CONTRASEÑA
+  // EMAIL Y CONTRASEÑA
   const signUp = (email, password) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((firebaseUser) =>{
         console.log("Usuario Creado: ", firebaseUser);
-        props.setUsuario(firebaseUser)
       });
   };
 
   const logIn = (email, password) => {
     signInWithEmailAndPassword(auth, email, password).then((firebaseUser) => {
       console.log("Sesión Iniciada con:", firebaseUser.email)
-      props.setUsuario(firebaseUser);
     })
   };
 
@@ -74,7 +72,7 @@ const LoginView = (props) => {
       logIn(email, password);
     }
 
-  };*/
+  };
 
   async function handleOnClick () {
     const googleProvider = new GoogleAuthProvider(); 
@@ -105,7 +103,7 @@ const LoginView = (props) => {
   if(currentState == 4){
     return  <div className="session">
             <div className="form-session">
-              <form className="form-container" /*onSubmit={submitHandler}*/>
+              <form className="form-container" onSubmit={submitHandler}>
                 <h1>{isSignUp ? "Registrarte" : "Iniciar Sesión"}</h1>
                 <div className="wrap">
                   <p>Correo Electrónico</p>

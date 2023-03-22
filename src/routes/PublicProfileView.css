@@ -4,7 +4,13 @@ body{
 
 .profile {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   margin-top: 5vh;
+}
+.profile-img img{
+  min-width: 200px;
+  min-height: 200px;
 }
 

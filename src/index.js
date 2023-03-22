@@ -33,7 +33,7 @@ ReactDOM.render(
             <Header backButton="/" />
             <ProfileView/>
           </Route>
-          <Route path="u/:username">
+          <Route path="/u/:username">
             <Header backButton="/" />
             <PublicProfileView/>
           </Route>

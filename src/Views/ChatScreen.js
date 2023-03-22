@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import "./ChatScreen.css";
+import AuthProvider from "src/Components/authProvider";
+import { useHistory } from "react-router-dom";
 
 const ChatScreen = () => {
   const [input, setInput] = useState("");
@@ -21,6 +23,30 @@ const ChatScreen = () => {
       message: "yo",
     },
   ]);
+  const history = useHistory();
+  const [currentState, setCurrentState] = useState(0);
+  const [currentUser, setCurrentUser] = useState({});
+
+  async function handleUserLoggedIn(user) {
+    setCurrentUser(user);
+    setCurrentState(2);
+  }
+
+  function handleUserNotRegistered(user) {
+    history.push('/login');
+  }
+
+  function handleUserNotLoggedIn() {
+    history.push('/login');
+  }
+
+  if(currentState != 2){
+    return (<AuthProvider
+      onUserLoggedIn={handleUserLoggedIn}
+      onUserNotRegistered={handleUserNotRegistered}
+      onUserNotLoggedIn={handleUserNotLoggedIn}
+  ></AuthProvider>);
+  }  
 
   const handleSend = (e) => {
     e.preventDefault();
