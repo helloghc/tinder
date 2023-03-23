@@ -103,3 +103,7 @@ export async function getUserPublicProfileInfo(uid){
         profileInfo: profileInfo,
     };
 }
+
+export  function logout(){
+    auth.signOut();
+}

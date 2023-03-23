@@ -1,9 +1,7 @@
 import React, { useRef, useState } from "react";
 import "./ProfileView.css";
-import Header from "src/Components/Header";
 import AuthProvider from "src/Components/authProvider";
-import { useHistory } from "react-router-dom";
-import { async } from "@firebase/util";
+import { Link, useHistory } from "react-router-dom";
 import { getProfilePhotoUrl, setUserProfilePhoto, updateUser } from "src/Api/firebase";
 
 
@@ -66,16 +64,23 @@ const ProfileView = () => {
   ></AuthProvider>);
            
   }
-  return  <div>
-            <h2>Edit Profile</h2>
+  return  <div className="page-container">
+            <div className="profile">
+              <h2>Edit Profile</h2>
+              <div className="profile-container">
+                <div className="profile-img">
+                  <img src={profileUrl} alt="" width={100}/>
+                </div>
+                <div>
+                  <button  onClick={handleOpenFilePicker}>Choose new profilePicture</button>
+                  <input ref={fileRef} type="file" style={{display: 'none'}} onChange={handleChangeFile} />
+                </div>
+              </div>
+            </div>
             <div>
-              <div>
-                <img src={profileUrl} alt="" width={100}/>
-              </div>
-              <div>
-                <button  onClick={handleOpenFilePicker}>Choose new profilePicture</button>
-                <input ref={fileRef} type="file" style={{display: 'none'}} onChange={handleChangeFile} />
-              </div>
+              <Link to="/signout">
+                <button>SignOut</button>
+              </Link>
             </div>
           </div>
 };

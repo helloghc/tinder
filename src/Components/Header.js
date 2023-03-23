@@ -5,14 +5,10 @@ import ForumIcon from "@material-ui/icons/Forum";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import { Link, useHistory } from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth"
 
 function Header({ backButton }) {
   const history = useHistory();
-  const auth = getAuth();
-  const logOut = () => {
-    signOut(auth)
-  };
+  
   return (
     <div className="header">
       {backButton ? (
@@ -26,7 +22,6 @@ function Header({ backButton }) {
           </IconButton>
         </Link>
       )}
-      <button onClick={logOut}>CS</button>
       <Link to="/">
         <img
           className="header__logo"

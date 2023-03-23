@@ -8,6 +8,7 @@ const PublicProfileView = () => {
   const params = useParams();
   const [profile, setProfile] = useState(null);
   const [url, setUrl] = useState("");
+  const [state, setState] = useState(0);
 
   useEffect(() => {
     getProfile();
@@ -15,9 +16,7 @@ const PublicProfileView = () => {
     async function getProfile(){
     
       const username = params.username; 
-      console.log(username); 
-      console.log(params , "adasdasd");
-      console.log(profile, "no existe");
+      console.log(username);
       try {
         const userUid = await existUsername(username);
         console.log(userUid);
@@ -29,6 +28,8 @@ const PublicProfileView = () => {
           const url = await getProfilePhotoUrl(userInfo.profileInfo.profilePicture);
           setUrl(url);
           console.log(userInfo);
+        } else {
+          setState(7);
         }
       } catch (error) {
 
@@ -36,16 +37,20 @@ const PublicProfileView = () => {
     }    
   }, [ params ]);
 
+  if(state == 7){
+    return <div>Username Doesn't exist</div>
+  }
+
   return  <div className="profile">
             <div>
               <h2>Profile</h2>
             </div>
             <div className="profile-img">
-              <img  />
+              <img src={url} alt="" />
             </div>
             <div>
-              <h2>username</h2>
-              <p>displayName</p>
+              <h2>username: {profile?.profileInfo.username}</h2>
+              <p>displayName: </p>
             </div>
           </div>;
 };

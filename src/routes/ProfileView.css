@@ -1,10 +1,32 @@
 body{
     min-height: 100%;
 }
-
+.page-container{
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
 .profile {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   margin-top: 5vh;
+  gap: 20px;
+}
+.profile-img img{
+  min-width: 200px;
+  min-height: 200px;
+}
+.profile-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5vh;
+  gap: 20px;
 }
 
