@@ -24,28 +24,6 @@ const LoginView = (props) => {
 
   const [isSignUp, setIsSignUp] = React.useState(false);
 
-  /*useEffect(() => {
-    setCurrentState(1);
-    onAuthStateChanged(auth, async (user) => {
-      if(user){
-        const isRegistered = await userExist(user.uid);
-        if(isRegistered){
-          history.push('/');
-          setCurrentState(2);
-        } else {
-          history.push('/choose-username');
-          setCurrentState(3);
-        }
-        setCurrentState(3);
-  
-      } else {
-        setCurrentState(4);
-        console.log('No hay nadie autenticado...');
-      }
-    });
-  } , [history]);*/
-
-  // EMAIL Y CONTRASEÑA
   const signUp = (email, password) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((firebaseUser) =>{

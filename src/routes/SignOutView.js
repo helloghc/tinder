@@ -9,7 +9,7 @@ const SignOutView = () => {
   const history = useHistory();
 
   async function handleUserLoggedIn(user) {
-    await logout();
+    logout();
   }
 
   function handleUserNotRegistered(user) {

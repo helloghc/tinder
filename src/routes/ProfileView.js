@@ -46,12 +46,15 @@ const ProfileView = () => {
         console.log(res);
 
         if(res){
-          const tmpUser = {...currentUser}
+          const tmpUser = {...currentUser};
+          const reload = window.location.reload(true);
           tmpUser.profilePicture = res.metadata.fullPath;
           await updateUser(tmpUser);
           setCurrentUser({...tmpUser})
           const url = await getProfilePhotoUrl(currentUser.profilePicture);
           setProfileUrl(url); 
+          reload();
+          
         }
       }
     }

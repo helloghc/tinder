@@ -24,9 +24,11 @@ export default function AuthProvider({ children, onUserLoggedIn, onUserNotLogged
             } else {
                 await registerNewUser({
                     uid: user.uid,
-                    displayName: user.displayName,
+                    name: '',
                     profilePicture:'',
                     username:'',
+                    city:'',
+                    estado:'',
                     processCompleted: false,
                 });
                 onUserNotRegistered(user);

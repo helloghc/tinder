@@ -34,7 +34,7 @@ export async function userExist(uid){
 export async function existUsername(username){
     const users = [];
     const docsRef = collection(database, 'people');
-    const q = query(docsRef, where(username, '==', username));
+    const q = query(docsRef, where('username', '==', username));
 
     const querySnapshot = await getDocs(q);
 
