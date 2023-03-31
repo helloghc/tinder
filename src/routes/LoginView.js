@@ -71,7 +71,7 @@ const LoginView = (props) => {
   };
 
   function handleUserNotRegistered(user) {
-    history.push('/choose-username')
+    history.push('/registration')
   };
 
   function handleUserNotLoggedIn() {

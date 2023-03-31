@@ -86,14 +86,25 @@ export async function setUserProfilePhoto(uid, file){
 
 export async function getProfilePhotoUrl(profilePicture){
     try {
-        const imageRef = ref(storage, profilePicture);
         
+
+        const imageRef = ref(storage, profilePicture);
         const url = await getDownloadURL(imageRef);
 
         return url
+        
+        /*getDownloadURL(ref(storage, profilePicture))
+        .then((url) => {
+    // `url` is the download URL for 'images/stars.jpg'
+
+    // Or inserted into an <img> element
+        const img = document.getElementById('insertProfilePic');
+        img.setAttribute('src', url);
+    })*/
     } catch (error) {
         console.error(error);
     }
+    
 }
 
 export async function getUserPublicProfileInfo(uid){

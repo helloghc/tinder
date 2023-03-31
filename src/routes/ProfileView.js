@@ -47,14 +47,11 @@ const ProfileView = () => {
 
         if(res){
           const tmpUser = {...currentUser};
-          const reload = window.location.reload(true);
           tmpUser.profilePicture = res.metadata.fullPath;
           await updateUser(tmpUser);
           setCurrentUser({...tmpUser})
           const url = await getProfilePhotoUrl(currentUser.profilePicture);
           setProfileUrl(url); 
-          reload();
-          
         }
       }
     }
@@ -71,11 +68,8 @@ const ProfileView = () => {
             <div className="profile">
               <h2>Edit Profile</h2>
               <div className="profile-container">
-                <div className="profile-img">
-                  <img src={profileUrl} alt="" width={100}/>
-                </div>
-                <div>
-                  <button  onClick={handleOpenFilePicker}>Choose new profilePicture</button>
+                <div className="profile-img" id="insertProfilePic">
+                  <img src={profileUrl} alt="Foto de Perfil" onClick={handleOpenFilePicker} width={100}/>
                   <input ref={fileRef} type="file" style={{display: 'none'}} onChange={handleChangeFile} />
                 </div>
               </div>
@@ -86,6 +80,9 @@ const ProfileView = () => {
               </Link>
             </div>
           </div>
+
 };
+
+
 
 export default ProfileView;

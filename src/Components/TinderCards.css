@@ -4,15 +4,56 @@
     padding: 20px;
     max-width: 85vw;
     height: 50vh;
-    border-radius: 20px;
+    border-radius: 0px 20px 20px 0px;
     background-size: cover;
     background-position: center;
     box-shadow: 0px 18px 53px 0px rgba(0,0,0,0.3)
 }
-
-.card h3 {
-    position: absolute;
-    bottom: 10px;
+.infocard {
+    position: relative;
+    width: 600px;
+    padding: 20px;
+    max-width: 85vw;
+    height: 50vh;
+    border-radius: 20px 0px 0px 20px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0px 18px 53px 0px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-around;
+    
+}
+.description{
+    display: flex;
+    gap: 50px;
+}
+.container-label-one{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 5px;
+    flex: 1;
+}
+.container-label-two{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 1;
+}
+.description-labels{
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    align-items: center;
+}
+.infocard h2 {
+    color: white;
+}
+.infocard h3 {
+    color: white;
+}
+.infocard h4 {
     color: white;
 }
 
@@ -25,4 +66,25 @@
 /* stacks cards on top of each other */
 .swipe {
     position: absolute;
+    display: flex;
+}
+
+@media (max-width: 600px) {
+    .swipe {
+        position: absolute;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+    .card {
+        width: 600px;
+        height: 35vh;
+        border-radius: 20px 20px 0px 0px;
+    }
+    .infocard {
+        width: 600px;
+        height: 15vh;
+        border-radius: 0px 0px 20px 20px;
+        
+    }
 }

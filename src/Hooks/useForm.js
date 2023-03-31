@@ -5,8 +5,6 @@ import { useState } from "react";
 export const useForm = (initialForm, validationsForm) => {
     const [form, setForm] = useState(initialForm);
     const [errors, setErrors] = useState({});
-    const [loading, setLoading] = useState(false);
-    const [response, setResponse] = useState(null);
 
     const handleChange = (e) => {
     
@@ -28,8 +26,6 @@ export const useForm = (initialForm, validationsForm) => {
     return {
         form,
         errors,
-        loading,
-        response,
         handleChange,
         handleBlur,
         handleSubmit,

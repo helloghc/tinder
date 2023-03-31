@@ -13,7 +13,7 @@ import LoginView from './routes/LoginView';
 import ProfileView from './routes/ProfileView';
 import SignOutView from './routes/SignOutView';
 import PublicProfileView from './routes/PublicProfileView'
-import ChooseUsernameView from './routes/ChooseUsernameView'
+import Register from './routes/Register';
 
 ReactDOM.render(
       <BrowserRouter>
@@ -37,8 +37,8 @@ ReactDOM.render(
             <Header backButton="/" />
             <PublicProfileView/>
           </Route>
-          <Route exact path="/choose-username">
-            <ChooseUsernameView/>
+          <Route exact path="/registration">
+            <Register/>
           </Route>
           <Route path="/login">
             <LoginView/>

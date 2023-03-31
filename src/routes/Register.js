@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AuthProvider from "src/Components/authProvider";
 import { useHistory } from "react-router-dom";
-import "./ChooseUsernameView.css";
+import "./Register.css";
 import { existUsername, updateUser } from "src/Api/firebase";
 import { useForm } from "src/Hooks/useForm";
 
@@ -10,7 +10,9 @@ const initialForm = {
   name: "",
   username: "",
   city: "",
-  estado: "",
+  raza: "",
+  vacuna: "",
+  edad:"",
 };
 const validationsForm = (form) => {
   let errors = {};
@@ -31,10 +33,10 @@ const validationsForm = (form) => {
         errors.username = "Este campo solo admite letras y espacios";
     }
     
-    if(!form.estado.trim()){
-        errors.estado = "El campo Estado es requerido";
-    }else if(!regexName.test(form.estado.trim())){
-        errors.estado = "Este campo solo admite letras y espacios";
+    if(!form.raza.trim()){
+        errors.raza = "El campo Raza es requerido";
+    }else if(!regexName.test(form.raza.trim())){
+        errors.raza = "Este campo solo admite letras y espacios";
     }
 
     if(!form.city.trim()){
@@ -42,27 +44,30 @@ const validationsForm = (form) => {
     }else if(!regexName.test(form.city.trim())){
         errors.city = "Este campo solo admite letras y espacios";
     }
+    if(!form.edad.trim()){
+        errors.edad = "El campo Edad es requerido";
+    }else if(!regexName.test(form.edad.trim())){
+        errors.edad = "Este campo solo admite letras y espacios";
+    }
+    if(!form.vacuna.trim()){
+        errors.vacuna = "El campo Vacunas es requerido";
+    }else if(!regexName.test(form.vacuna.trim())){
+        errors.vacuna = "Este campo solo admite letras y espacios";
+    }
     return errors;
 };
 
 
-const ChooseUsernameView = () => {
+const Register = () => {
   const {
     form,
     errors,
-    loading,
-    response,
     handleChange,
     handleBlur,
-    handleSubmit,
   } = useForm(initialForm, validationsForm);
 
   const [currentState, setCurrentState] = useState(0);
   const [currentUser, setCurrentUser] = useState({});
-  const [username, setUsername] = useState("");
-  const [name, setName] = useState("");
-  const [city, setCity] = useState("");
-  const [estado, setEstado] = useState("");
 
 const history = useHistory();
   
@@ -78,19 +83,6 @@ const history = useHistory();
   function handleUserNotLoggedIn() {
     history.push('/login');
   }
-  
-  /*function handleInputUsername(e){
-    setUsername(e.target.value);
-  }
-  function handleInputCity(e){
-    setCity(e.target.value);
-  }
-  function handleInputEstado(e){
-    setEstado(e.target.value);
-  }
-  function handleInputName(e){
-    setName(e.target.value);
-  }*/
 
   async function handleContinue() {
     if ( form.username != "" ) {
@@ -102,7 +94,9 @@ const history = useHistory();
         tmp.name = form.name;
         tmp.username = form.username;
         tmp.city = form.city;
-        tmp.estado = form.estado;
+        tmp.raza = form.raza;
+        tmp.edad = form.edad;
+        tmp.vacuna = form.vacuna;
         tmp.processCompleted = true;
         await updateUser(tmp);
         setCurrentState(6);
@@ -113,21 +107,31 @@ const history = useHistory();
   if(currentState == 3 || currentState == 5){
     return <div>
       <h1> Bienvenido</h1>
-      <p>Nombre y Apellido</p>
+      <p>Nombre de mascota</p>
       <div>
-        <input type="text" name="name" onChange={handleChange} onBlur={handleBlur} value={form.name} />
-        {errors.name && <p>{errors.name}</p>}
+        <input type="text" name="name" onChange={handleChange} onBlur={handleBlur} value={form.username} />
+        {errors.username && <p>{errors.username}</p>}
       </div>
       <hr/><br/>
       <p>Elige tu Nombre de Usuario</p>
       <div>
-        <input type="text" name="username" onChange={handleChange} onBlur={handleBlur} value={form.username} required/>
-        {errors.username && <p>{errors.username}</p>}
+        <input type="text" name="username" onChange={handleChange} onBlur={handleBlur} value={form.name} required/>
+        {errors.name && <p>{errors.name}</p>}
       </div>
       <p>Estado</p>
       <div>
-        <input type="text" name="estado" onChange={handleChange} onBlur={handleBlur} value={form.estado} required/>
-        {errors.estado && <p>{errors.estado}</p>}
+        <input type="text" name="raza" onChange={handleChange} onBlur={handleBlur} value={form.raza} required/>
+        {errors.raza && <p>{errors.raza}</p>}
+      </div>
+      <p>edad de tu mascota</p>
+      <div>
+        <input type="text" name="raza" onChange={handleChange} onBlur={handleBlur} value={form.edad} required/>
+        {errors.edad && <p>{errors.edad}</p>}
+      </div>
+      <p>Vacunas</p>
+      <div>
+        <input type="text" name="city" onChange={handleChange} onBlur={handleBlur} value={form.vacuna} required/>
+        {errors.vacuna && <p>{errors.vacuna}</p>}
       </div>
       <p>Ciudad</p>
       <div>
@@ -147,4 +151,4 @@ const history = useHistory();
 ></AuthProvider>);
 };
 
-export default ChooseUsernameView;
+export default Register;
