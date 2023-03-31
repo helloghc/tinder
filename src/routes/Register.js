@@ -46,9 +46,8 @@ const validationsForm = (form) => {
     }
     if(!form.edad.trim()){
         errors.edad = "El campo Edad es requerido";
-    }else if(!regexName.test(form.edad.trim())){
-        errors.edad = "Este campo solo admite letras y espacios";
     }
+
     if(!form.vacuna.trim()){
         errors.vacuna = "El campo Vacunas es requerido";
     }else if(!regexName.test(form.vacuna.trim())){
@@ -109,35 +108,40 @@ const history = useHistory();
       <h1> Bienvenido</h1>
       <p>Nombre de mascota</p>
       <div>
-        <input type="text" name="name" onChange={handleChange} onBlur={handleBlur} value={form.username} />
+        <input type="text" name="username" onChange={handleChange} onBlur={handleBlur} value={form.username} />
         {errors.username && <p>{errors.username}</p>}
       </div>
-      <hr/><br/>
-      <p>Elige tu Nombre de Usuario</p>
+      <br/>
+      <p>Nombre del Dueño</p>
       <div>
-        <input type="text" name="username" onChange={handleChange} onBlur={handleBlur} value={form.name} required/>
+        <input type="text" name="name" onChange={handleChange} onBlur={handleBlur} value={form.name} required/>
         {errors.name && <p>{errors.name}</p>}
       </div>
-      <p>Estado</p>
+      <br/>
+      <p>Raza</p>
       <div>
         <input type="text" name="raza" onChange={handleChange} onBlur={handleBlur} value={form.raza} required/>
         {errors.raza && <p>{errors.raza}</p>}
       </div>
-      <p>edad de tu mascota</p>
+      <br/>
+      <p>Edad de tu mascota</p>
       <div>
-        <input type="text" name="raza" onChange={handleChange} onBlur={handleBlur} value={form.edad} required/>
+        <input type="text" name="edad" onChange={handleChange} onBlur={handleBlur} value={form.edad} required/>
         {errors.edad && <p>{errors.edad}</p>}
       </div>
+      <br/>
       <p>Vacunas</p>
       <div>
-        <input type="text" name="city" onChange={handleChange} onBlur={handleBlur} value={form.vacuna} required/>
+        <input type="text" name="vacuna" onChange={handleChange} onBlur={handleBlur} value={form.vacuna} required/>
         {errors.vacuna && <p>{errors.vacuna}</p>}
       </div>
+      <br/>
       <p>Ciudad</p>
       <div>
         <input type="text" name="city" onChange={handleChange} onBlur={handleBlur} value={form.city} required/>
         {errors.city && <p>{errors.city}</p>}
       </div>
+      <br/>
       <div>
         <button onClick={handleContinue}>Continuar</button>
       </div>
