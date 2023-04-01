@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import AuthProvider from "src/Components/authProvider";
 import { useHistory } from "react-router-dom";
 import "./Register.css";
-import { existUsername, updateUser } from "src/Api/firebase";
+import { existUsername, updateUser, getProfilePhotoUrl, setUserProfilePhoto } from "src/Api/firebase";
 import { useForm } from "src/Hooks/useForm";
 
 
@@ -67,6 +67,8 @@ const Register = () => {
 
   const [currentState, setCurrentState] = useState(0);
   const [currentUser, setCurrentUser] = useState({});
+  const [profileUrl, setProfileUrl] = useState(null);
+  const fileRef = useRef();
 
 const history = useHistory();
   
@@ -103,47 +105,76 @@ const history = useHistory();
     }
   }
 
+  function handleOpenFilePicker(){
+    if(fileRef.current){
+      fileRef.current.click();
+    }
+  }
+
+  function handleChangeFile(e){
+    const files = e.target.files;
+    const fileReader = new FileReader();
+    if(fileReader && files && files.length > 0){
+      fileReader.readAsArrayBuffer(files[0]);
+      fileReader.onload = async function(){
+        const imageData = fileReader.result;
+
+        const res = await setUserProfilePhoto(currentUser.uid, imageData);
+        console.log(res);
+
+        if(res){
+          const tmpUser = {...currentUser};
+          tmpUser.profilePicture = res.metadata.fullPath;
+          await updateUser(tmpUser);
+          setCurrentUser({...tmpUser})
+          const url = await getProfilePhotoUrl(currentUser.profilePicture);
+          setProfileUrl(url); 
+        }
+      }
+    }
+  }
+
   if(currentState == 3 || currentState == 5){
-    return <div>
-      <h1> Bienvenido</h1>
-      <p>Nombre de mascota</p>
-      <div>
-        <input type="text" name="username" onChange={handleChange} onBlur={handleBlur} value={form.username} />
-        {errors.username && <p>{errors.username}</p>}
-      </div>
-      <br/>
-      <p>Nombre del Dueño</p>
-      <div>
-        <input type="text" name="name" onChange={handleChange} onBlur={handleBlur} value={form.name} required/>
-        {errors.name && <p>{errors.name}</p>}
-      </div>
-      <br/>
-      <p>Raza</p>
-      <div>
-        <input type="text" name="raza" onChange={handleChange} onBlur={handleBlur} value={form.raza} required/>
-        {errors.raza && <p>{errors.raza}</p>}
-      </div>
-      <br/>
-      <p>Edad de tu mascota</p>
-      <div>
-        <input type="text" name="edad" onChange={handleChange} onBlur={handleBlur} value={form.edad} required/>
-        {errors.edad && <p>{errors.edad}</p>}
-      </div>
-      <br/>
-      <p>Vacunas</p>
-      <div>
-        <input type="text" name="vacuna" onChange={handleChange} onBlur={handleBlur} value={form.vacuna} required/>
-        {errors.vacuna && <p>{errors.vacuna}</p>}
-      </div>
-      <br/>
-      <p>Ciudad</p>
-      <div>
-        <input type="text" name="city" onChange={handleChange} onBlur={handleBlur} value={form.city} required/>
-        {errors.city && <p>{errors.city}</p>}
-      </div>
-      <br/>
-      <div>
-        <button onClick={handleContinue}>Continuar</button>
+    return <div className="register">
+      <div className="register-container">
+        <h1> Regístrate </h1>
+        <div className="profileimg" onClick={handleOpenFilePicker}>
+          <img className="image" src={profileUrl} alt="" />
+          <input ref={fileRef} type="file" style={{display: 'none'}} onChange={handleChangeFile} />
+        </div>
+        <div className="wrap">
+          <p>Nombre de mascota</p>
+          <input type="text" name="username" onChange={handleChange} onBlur={handleBlur} value={form.username} />
+          {errors.username && <p><strong className="error-form">{errors.username}</strong></p>}
+        </div>
+        <div className="wrap">
+          <p>Nombre del Dueño</p>
+          <input type="text" name="name" onChange={handleChange} onBlur={handleBlur} value={form.name} required/>
+          {errors.name && <p><strong  className="error-form">{errors.name}</strong></p>}
+        </div>
+        <div className="wrap">
+          <p>Raza</p>
+          <input type="text" name="raza" onChange={handleChange} onBlur={handleBlur} value={form.raza} required/>
+          {errors.raza && <p><strong className="error-form">{errors.raza}</strong></p>}
+        </div>
+        <div className="wrap">
+          <p>Edad de tu mascota</p>
+          <input type="text" name="edad" onChange={handleChange} onBlur={handleBlur} value={form.edad} required/>
+          {errors.edad && <p><strong className="error-form">{errors.edad}</strong></p>}
+        </div>        
+        <div className="wrap">
+          <p>Vacunas</p>
+          <input type="text" name="vacuna" onChange={handleChange} onBlur={handleBlur} value={form.vacuna} required/>
+          {errors.vacuna && <p><strong className="error-form">{errors.vacuna}</strong></p>}
+        </div>        
+        <div className="wrap">
+          <p>Ciudad</p>
+          <input type="text" id="city" name="city" onChange={handleChange} onBlur={handleBlur} value={form.city} required/>
+          {errors.city && <p><strong className="error-form">{errors.city}</strong></p>}
+        </div>
+        <div>
+          <button className="button-continue" onClick={handleContinue}>Continuar</button>
+        </div>
       </div>
     </div> 
   }

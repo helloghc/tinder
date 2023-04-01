@@ -2,9 +2,60 @@ body{
     min-height: 100%;
 }
 
-.profile {
+.register {
   display: flex;
   justify-content: center;
   margin-top: 5vh;
 }
+.register-container{
+  position: relative;
+  width: 400px;
+  padding: 20px;
+  max-width: 85vw;
+  color: white;
+  border-radius: 20px;
+  background-color: #FF5864;
+  box-shadow: 0px 18px 53px 0px rgb(0 0 0 / 30%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.profileimg{
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background-image: url("https://media.istockphoto.com/id/1218408229/es/vector/imagen-de-marcador-de-posici%C3%B3n-de-perfil-silueta-gris-sin-foto.jpg?s=170667a&w=0&k=20&c=BlHhJr47O0XNSF0htC5sGhLvKrOK-QYVFVPl-fjmATc=");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.profileimg img{
+  width: 100%;
+}
+.wrap{
+  gap: 4px;
+}
 
+.wrap input{
+  font-size: 20px;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.button-continue{
+  width: 150px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 2px solid #FF5864;
+}
+.error-form{
+  font-size: 18px;
+  color: yellow;
+}
