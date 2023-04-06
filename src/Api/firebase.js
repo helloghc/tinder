@@ -23,6 +23,7 @@ export const authForGoogle = getAuth(firebaseApp);
 export const auth = getAuth(firebaseApp);
 export const database = firebaseApp.firestore();
 export const storage = getStorage(firebaseApp);
+export const db = getFirestore();
 
 export async function userExist(uid){
     const docRef = doc(database, 'people', uid);
@@ -92,15 +93,6 @@ export async function getProfilePhotoUrl(profilePicture){
         const url = await getDownloadURL(imageRef);
 
         return url
-        
-        /*getDownloadURL(ref(storage, profilePicture))
-        .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-
-    // Or inserted into an <img> element
-        const img = document.getElementById('insertProfilePic');
-        img.setAttribute('src', url);
-    })*/
     } catch (error) {
         console.error(error);
     }

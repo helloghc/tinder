@@ -13,7 +13,7 @@ const SignOutView = () => {
   }
 
   function handleUserNotRegistered(user) {
-    history.push('/login');
+    logout();
   }
 
   function handleUserNotLoggedIn() {

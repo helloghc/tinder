@@ -5,8 +5,7 @@ import App from './App';
 import Header from "./Components/Header";
 import TinderCards from "./Components/TinderCards";
 import SwipeButtons from "./Components/SwipeButtons";
-import Chats from "./Views/Chats";
-import ChatScreen from "./Views/ChatScreen";
+import Chats from "./Components/ChatApp/Chats";
 import * as serviceWorker from './Components/serviceWorker.js';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import LoginView from './routes/LoginView';
@@ -20,7 +19,6 @@ ReactDOM.render(
         <Switch>
           <Route exact path="/chat/:person">
             <Header backButton="/chat" />
-            <ChatScreen/>
           </Route>
           <Route exact path="/chat">
             <Header backButton="/" />

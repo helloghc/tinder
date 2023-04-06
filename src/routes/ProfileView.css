@@ -2,25 +2,40 @@ body{
     min-height: 100%;
 }
 .page-container{
-  min-height: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  gap: 20px;
 }
 .profile {
+  position: relative;
+  width: 400px;
+  padding: 20px;
+  max-width: 85vw;
+  color: white;
+  border-radius: 20px;
+  background-color: #FF5864;
+  box-shadow: 0px 18px 53px 0px rgb(0 0 0 / 30%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 5vh;
-  gap: 20px;
+  gap: 10px;
+}
+.profile-img{
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background-image: url("https://media.istockphoto.com/id/1218408229/es/vector/imagen-de-marcador-de-posici%C3%B3n-de-perfil-silueta-gris-sin-foto.jpg?s=170667a&w=0&k=20&c=BlHhJr47O0XNSF0htC5sGhLvKrOK-QYVFVPl-fjmATc=");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 .profile-img img{
-  min-width: 200px;
-  min-height: 200px;
+  width: 100%;
 }
+
 .profile-container{
   display: flex;
   flex-direction: column;
@@ -29,4 +44,18 @@ body{
   margin-top: 5vh;
   gap: 20px;
 }
-
+.description-contain{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.signout{
+  width: 100px;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  background-color: white;
+  color: #FF5864;
+  font-weight: 600;
+}

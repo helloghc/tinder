@@ -3,6 +3,7 @@ import "./ProfileView.css";
 import AuthProvider from "src/Components/authProvider";
 import { Link, useHistory } from "react-router-dom";
 import { getProfilePhotoUrl, setUserProfilePhoto, updateUser } from "src/Api/firebase";
+import { Sync } from "@material-ui/icons";
 
 
 const ProfileView = () => {
@@ -42,7 +43,7 @@ const ProfileView = () => {
       fileReader.onload = async function(){
         const imageData = fileReader.result;
 
-        const res = await setUserProfilePhoto(currentUser.uid, imageData);
+        const res = await setUserProfilePhoto(currentUser.uid, imageData)
         console.log(res);
 
         if(res){
@@ -52,6 +53,12 @@ const ProfileView = () => {
           setCurrentUser({...tmpUser})
           const url = await getProfilePhotoUrl(currentUser.profilePicture);
           setProfileUrl(url); 
+          if(profileUrl != null){
+            tmpUser.cardPicture = profileUrl;
+            await updateUser(tmpUser);
+            setCurrentUser({...tmpUser})
+          }
+          
         }
       }
     }
@@ -66,19 +73,24 @@ const ProfileView = () => {
   }
   return  <div className="page-container">
             <div className="profile">
-              <h2>Edit Profile</h2>
-              <div className="profile-container">
-                <div className="profile-img" id="insertProfilePic">
-                  <img src={profileUrl} alt="Foto de Perfil" onClick={handleOpenFilePicker} width={100}/>
-                  <input ref={fileRef} type="file" style={{display: 'none'}} onChange={handleChangeFile} />
-                </div>
+              <div className="description-labels"><h2>{currentUser.username}</h2></div>
+              <div className="profile-img" id="insertProfilePic">
+                <img src={profileUrl} alt="Foto de Perfil" onClick={handleOpenFilePicker} width={100}/>
+                <input ref={fileRef} type="file" style={{display: 'none'}} onChange={handleChangeFile} />
+              </div>
+              <div className="description-contain">
+                <div className="description-labels"><h3>Dueño: {currentUser.name}</h3></div>
+                <div className="description-labels"><h3>Raza: {currentUser.raza}</h3></div>
+                <div className="description-labels"><h3>Edad: {currentUser.edad}</h3></div>
+                <div className="description-labels"><h3>Edad: {currentUser.city}</h3></div>
+              </div>
+              <div>
+                <Link to="/signout">
+                  <button className="signout">SignOut</button>
+                </Link>
               </div>
             </div>
-            <div>
-              <Link to="/signout">
-                <button>SignOut</button>
-              </Link>
-            </div>
+            
           </div>
 
 };

@@ -1,11 +1,9 @@
-body{
-    min-height: 100%;
-}
-
 .session {
   display: flex;
   justify-content: center;
-  margin-top: 5vh;
+  background-color: #FF5864;
+  min-height: 100%;
+  align-items: center;
 }
 
 .form-session{
@@ -15,7 +13,7 @@ body{
   max-width: 85vw;
   height: 50vh;
   border-radius: 20px;
-  background-color: #FF5864;
+  background-color: white;
   box-shadow: 0px 18px 53px 0px rgb(0 0 0 / 30%);
   display: flex;
   flex-direction: column;
@@ -31,7 +29,7 @@ body{
   gap: 20px;
 }
 .form-container h1{
-  color: aliceblue;
+  color: #FF5864;
 }
 .wrap{
   display: flex;
@@ -43,15 +41,15 @@ body{
 .wrap p {
   width: 300px;
   text-decoration: none;
-  color:white;
+  color: grey;
   font-size: 20px;
   font-weight: 500;
 }
 .wrap input{
   width: 300px;
   height: 30px;
-  border-radius: 10px;
-  border: 2px solid white;
+  border: none;
+  border-bottom: solid 2px #FF5864;
 }
 .button-session{
   width: 150px;
@@ -59,13 +57,45 @@ body{
   font-size: 18px;
   font-weight: 600;
   border-radius: 10px;
-  border: 2px solid #FF5864;
+  color: white;
+  border: none;
+  background-color: #FF5864;
 }
 .button-session2{
   padding: 10px 20px;
-  color: #fd297b;
+  color: white;
   font-size: 14px;
   font-weight: 600;
   border-radius: 10px;
-  border: 2px solid #FF5864;
+  border: none;
+  background-color: #FF5864;
+}
+.alt-options{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  color: grey;
+  font-size: 18px;
+  font-weight: 600;
+}
+.alt-options button{
+  padding: 10px 20px;
+  color: #FF5864;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: solid 2px #FF5864;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.alt-options button:hover{
+  color: rgb(0, 157, 255);
+  border: solid 2px rgb(0, 157, 255);
+}
+.alt-options button img{
+  width: 20px;
 }

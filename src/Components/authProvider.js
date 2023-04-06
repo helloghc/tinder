@@ -26,9 +26,11 @@ export default function AuthProvider({ children, onUserLoggedIn, onUserNotLogged
                     uid: user.uid,
                     name: '',
                     profilePicture:'',
+                    cardPicture:'',
                     username:'',
                     city:'',
-                    estado:'',
+                    raza:'',
+                    edad:'',
                     processCompleted: false,
                 });
                 onUserNotRegistered(user);

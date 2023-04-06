@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom"
 import "./LoginView.css";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import database, { authForGoogle, userExist, auth } from "../Api/firebase.js";
+import { authForGoogle, userExist, auth, database } from "../Api/firebase.js";
 import AuthProvider from "src/Components/authProvider";
- 
+import google from "../Resources/img/google.png"
+import { async } from "@firebase/util";
+import { doc, setDoc } from "firebase/firestore";
 
 
 const LoginView = (props) => {
@@ -37,10 +39,14 @@ const LoginView = (props) => {
     })
   };
 
-  const submitHandler = (e) => {
+  const submitHandler  = (e) => {
     e.preventDefault();
     const email = e.target.emailField.value;
     const password = e.target.passwordField.value;
+    async function userChats (){
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      await setDoc(doc(database, "userChats", res.user.uid), {});
+    }
     
     if(isSignUp){
       signUp(email, password);
@@ -49,7 +55,7 @@ const LoginView = (props) => {
     if(!isSignUp){
       logIn(email, password);
     }
-
+    userChats();
   };
 
   async function handleOnClick () {
@@ -60,7 +66,9 @@ const LoginView = (props) => {
   async function signInWithGoogle(googleProvider){
     try {
       const res = await signInWithPopup(auth, googleProvider);
+      await setDoc(doc(database, "userChats", res.user.uid), {});
       console.log(res);
+      
     } catch (error) {
       console.error(error);
     }
@@ -82,14 +90,12 @@ const LoginView = (props) => {
     return  <div className="session">
             <div className="form-session">
               <form className="form-container" onSubmit={submitHandler}>
-                <h1>{isSignUp ? "Registrarte" : "Iniciar Sesión"}</h1>
+                <h1>{isSignUp ? "Regístrate" : "Iniciar Sesión"}</h1>
                 <div className="wrap">
-                  <p>Correo Electrónico</p>
-                  <input type="email" id="emailField"></input>
+                  <input type="email" id="emailField" placeholder="Correo Electrónico"></input>
                 </div>
                 <div className="wrap">
-                  <p>Contraseña</p>
-                  <input type="password" id="passwordField"></input>
+                  <input type="password" id="passwordField" placeholder="Contraseña"></input>
                 </div>
                 <button className="button-session" type="submit">{isSignUp ? "Regístrate" : "Iniciar Sesión"}</button>
               </form>
@@ -98,7 +104,7 @@ const LoginView = (props) => {
               </button>
               <div className="alt-options">
                 <p>También puedes</p>
-                <button onClick={handleOnClick}>Iniciar Sesión con Google</button>
+                <button onClick={handleOnClick}>Iniciar Sesión con Google <img src={google} alt="login con google"></img></button>
               </div>
             </div>
           </div>;

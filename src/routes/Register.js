@@ -2,8 +2,9 @@ import React, { useRef, useState } from "react";
 import AuthProvider from "src/Components/authProvider";
 import { useHistory } from "react-router-dom";
 import "./Register.css";
-import { existUsername, updateUser, getProfilePhotoUrl, setUserProfilePhoto } from "src/Api/firebase";
+import { existUsername, updateUser, getProfilePhotoUrl, setUserProfilePhoto, database } from "src/Api/firebase";
 import { useForm } from "src/Hooks/useForm";
+
 
 
 const initialForm = {
@@ -76,8 +77,10 @@ const history = useHistory();
     history.push('/');
   }
 
-  function handleUserNotRegistered(user) {
+  async function handleUserNotRegistered(user) {
     setCurrentUser(user);
+    const url = await getProfilePhotoUrl(user.profilePicture);
+    setProfileUrl(url);
     setCurrentState(3);
   }
 
@@ -92,6 +95,7 @@ const history = useHistory();
         setCurrentState(5);
       } else {
         const tmp = {...currentUser};
+        tmp.cardPicture= profileUrl;
         tmp.name = form.name;
         tmp.username = form.username;
         tmp.city = form.city;
@@ -129,6 +133,11 @@ const history = useHistory();
           setCurrentUser({...tmpUser})
           const url = await getProfilePhotoUrl(currentUser.profilePicture);
           setProfileUrl(url); 
+          if(profileUrl != null){
+            tmpUser.cardPicture = profileUrl;
+            await updateUser(tmpUser);
+            setCurrentUser({...tmpUser})
+          }
         }
       }
     }
@@ -143,33 +152,27 @@ const history = useHistory();
           <input ref={fileRef} type="file" style={{display: 'none'}} onChange={handleChangeFile} />
         </div>
         <div className="wrap">
-          <p>Nombre de mascota</p>
-          <input type="text" name="username" onChange={handleChange} onBlur={handleBlur} value={form.username} />
+          <input type="text" name="username" placeholder="Nombre de tu Mascota" onChange={handleChange} onBlur={handleBlur} value={form.username} />
           {errors.username && <p><strong className="error-form">{errors.username}</strong></p>}
         </div>
         <div className="wrap">
-          <p>Nombre del Dueño</p>
-          <input type="text" name="name" onChange={handleChange} onBlur={handleBlur} value={form.name} required/>
+          <input type="text" name="name" placeholder="Tu Nombre" onChange={handleChange} onBlur={handleBlur} value={form.name} required/>
           {errors.name && <p><strong  className="error-form">{errors.name}</strong></p>}
         </div>
         <div className="wrap">
-          <p>Raza</p>
-          <input type="text" name="raza" onChange={handleChange} onBlur={handleBlur} value={form.raza} required/>
+          <input type="text" name="raza" placeholder="Raza de tu Mascota" onChange={handleChange} onBlur={handleBlur} value={form.raza} required/>
           {errors.raza && <p><strong className="error-form">{errors.raza}</strong></p>}
         </div>
         <div className="wrap">
-          <p>Edad de tu mascota</p>
-          <input type="text" name="edad" onChange={handleChange} onBlur={handleBlur} value={form.edad} required/>
+          <input type="text" name="edad" placeholder="Edad de tu Mascota" onChange={handleChange} onBlur={handleBlur} value={form.edad} required/>
           {errors.edad && <p><strong className="error-form">{errors.edad}</strong></p>}
         </div>        
         <div className="wrap">
-          <p>Vacunas</p>
-          <input type="text" name="vacuna" onChange={handleChange} onBlur={handleBlur} value={form.vacuna} required/>
+          <input type="text" name="vacuna" placeholder="¿Que vacunas tíene tu Mascota?" onChange={handleChange} onBlur={handleBlur} value={form.vacuna} required/>
           {errors.vacuna && <p><strong className="error-form">{errors.vacuna}</strong></p>}
         </div>        
         <div className="wrap">
-          <p>Ciudad</p>
-          <input type="text" id="city" name="city" onChange={handleChange} onBlur={handleBlur} value={form.city} required/>
+          <input type="text" id="city" name="city" placeholder="Ciudad" onChange={handleChange} onBlur={handleBlur} value={form.city} required/>
           {errors.city && <p><strong className="error-form">{errors.city}</strong></p>}
         </div>
         <div>
