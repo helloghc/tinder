@@ -4,7 +4,7 @@ import { Link, useHistory } from "react-router-dom"
 import "./LoginView.css";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { authForGoogle, userExist, auth, database } from "../Api/firebase.js";
-import AuthProvider from "src/Components/authProvider";
+import AuthProvider from "src/Api/Context/authProvider";
 import google from "../Resources/img/google.png"
 import { async } from "@firebase/util";
 import { doc, setDoc } from "firebase/firestore";

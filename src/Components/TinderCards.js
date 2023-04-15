@@ -4,15 +4,13 @@ import "./TinderCards.css";
 import {database,  getProfilePhotoUrl} from "../Api/firebase.js";
 import Header from "./Header";
 import SwipeButtons from "./SwipeButtons";
-import AuthProvider from "src/Components/authProvider";
+import AuthProvider from "src/Api/Context/authProvider";
 import { useHistory } from "react-router-dom";
 
 
 function TinderCards() {
   const [people, setPeople] = useState([]);
   const [currentState, setCurrentState] = useState(0);
-  const [currentUser, setCurrentUser] = useState({});
-  const [profileUrl, setProfileUrl] = useState(null);
 
   useEffect(() => {
     const unsubscribe = database
@@ -30,7 +28,6 @@ function TinderCards() {
   const history = useHistory();
   
   async function handleUserLoggedIn(user) {
-    setCurrentUser(user);
     setCurrentState(2);
   }
 
@@ -64,16 +61,17 @@ function TinderCards() {
               style={{ background: "#FF5864" }}
               className="infocard"
             >
-              <div className="username"><h2>{user.username}</h2></div>
+              <div className="username"><h3>{user.username}</h3></div>
               <div className="description">
                 <div className="container-label-one">
-                  <div className="description-labels"><h3>Dueño:</h3><h3>{user.name}</h3></div>
-                  <div className="description-labels"><h3>Raza:</h3><h3>{user.raza}</h3></div>
-                  <div className="description-labels"><h3>Edad:</h3><h3>{user.edad}</h3></div>
+                  <div className="description-labels"><p className="data"><strong>{user.name}</strong></p></div>
+                  <div className="description-labels"><p className="data"><strong>Mascota: </strong>{user.pet}</p></div>
+                  <div className="description-labels"><p className="data"><strong>Raza: </strong>{user.raza}</p></div>
                 </div>
                 <div className="container-label-two">  
-                  <div className="description-labels"><h3>Vacunas:</h3><h3>{user.vacuna}</h3></div>
-                  <div className="description-labels"><h3>Ciudad:</h3><h3>{user.city}</h3></div>
+                  <div className="description-labels"><p className="data"><strong>Edad: </strong>{user.edad}</p></div>
+                  <div className="description-labels"><p className="data"><strong>Vacunas: </strong>{user.vacuna}</p></div>
+                  <div className="description-labels"><p className="data"><strong>Ciudad: </strong>{user.city}</p></div>
                 </div>
               </div>
             </div>

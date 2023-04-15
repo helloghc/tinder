@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 import "./ProfileView.css";
-import AuthProvider from "src/Components/authProvider";
+import AuthProvider from "src/Api/Context/authProvider";
 import { Link, useHistory } from "react-router-dom";
-import { getProfilePhotoUrl, setUserProfilePhoto, updateUser } from "src/Api/firebase";
+import { getProfilePhotoUrl, logout, setUserProfilePhoto, updateUser } from "src/Api/firebase";
 import { Sync } from "@material-ui/icons";
 
 
@@ -85,9 +85,7 @@ const ProfileView = () => {
                 <div className="description-labels"><h3>Edad: {currentUser.city}</h3></div>
               </div>
               <div>
-                <Link to="/signout">
-                  <button className="signout">SignOut</button>
-                </Link>
+                <button className="signout" onClick={logout} >SignOut</button>
               </div>
             </div>
             

@@ -1,0 +1,32 @@
+.ChatHeader {
+    display:flex;
+    border-bottom: 1px solid #f9f9f9;
+    align-items: center;
+    background-color: #ff8c94;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.header__icon {
+    padding:20px;
+}
+.headerLinkTwo{
+    flex: 1;
+    cursor: pointer;
+    padding: 20px 10px;
+    font-weight: 600;
+}
+.headerLinkTwo:hover{
+    background-color: #FF5864;
+    
+}
+.headerLinkthree:hover{
+    background-color: #FF5864;
+    
+}
+.infoContainer{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 5px;
+}

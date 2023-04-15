@@ -62,6 +62,9 @@
     justify-content: center;
     margin-top: 5vh;
 }
+.data{
+    color: white;
+}
 
 /* stacks cards on top of each other */
 .swipe {

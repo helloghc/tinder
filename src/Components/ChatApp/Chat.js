@@ -1,20 +1,19 @@
-import React from "react";
-import "./Chat.css";
-import Avatar from "@material-ui/core/Avatar";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import Messages from "./Other/Messages";
+import Input from "./Other/Input";
+import { ChatContext } from "src/Api/Context/ChatContext";
+import "./Chat.css"
+import ChatHeader from "./Other/ChatHeader";
 
-const Chat = ({ name, message, profilePic, timestamp }) => {
+const Chat = () => {
+  const { data } = useContext(ChatContext);
+
   return (
-    <Link to={`/chat/${name}`}>
-      <div className="chat">
-        <Avatar className="chat__image" src={profilePic} />
-        <div className="chat__details">
-          <h2>{name}</h2>
-          <p>{message}</p>
-        </div>
-        <p className="chat__timestamp">{timestamp}</p>
-      </div>
-    </Link>
+    <div className="chat">
+      <ChatHeader/>
+      <Messages />
+      <Input/>
+    </div>
   );
 };
 

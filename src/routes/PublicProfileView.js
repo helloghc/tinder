@@ -12,8 +12,8 @@ import {
   updateDoc,
   serverTimestamp,
   getDoc,
-} from "firebase/firestore";
-import AuthProvider from "src/Components/authProvider";
+} from "firebase/firestore"; 
+import AuthProvider from "src/Api/Context/authProvider";
 
 const PublicProfileView = () => {
   const params = useParams();
@@ -58,9 +58,9 @@ const PublicProfileView = () => {
   const handleSelect = async () => {
     //check whether the group(chats in firestore) exists, if not create
     const combinedId =
-      currentUser.uid > user.uid
-        ? currentUser.uid + user.uid
-        : user.uid + currentUser.uid;
+      currentUser.uid > profile.uid
+        ? currentUser.uid + profile.uid
+        : profile.uid + currentUser.uid;
     try {
       const res = await getDoc(doc(database, "chats", combinedId));
 
@@ -71,9 +71,9 @@ const PublicProfileView = () => {
         //create user chats
         await updateDoc(doc(database, "userChats", currentUser.uid), {
           [combinedId + ".userInfo"]: {
-            uid: user.uid,
-            name: user.name,
-            cardPicture: user.cardPicture,
+            uid: profile.uid,
+            name: profile.name,
+            cardPicture: profile.cardPicture,
           },
           [combinedId + ".date"]: serverTimestamp(),
         });

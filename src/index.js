@@ -2,50 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Header from "./Components/Header";
-import TinderCards from "./Components/TinderCards";
-import SwipeButtons from "./Components/SwipeButtons";
-import Chats from "./Components/ChatApp/Chats";
 import * as serviceWorker from './Components/serviceWorker.js';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import LoginView from './routes/LoginView';
-import ProfileView from './routes/ProfileView';
-import SignOutView from './routes/SignOutView';
-import PublicProfileView from './routes/PublicProfileView'
-import Register from './routes/Register';
+import { AuthContextProvider } from "./Api/Context/authProvider";
+import { ChatContextProvider } from "./Api/Context/ChatContext";
+import AuthProvider from './Api/Context/authProvider';
 
 ReactDOM.render(
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/chat/:person">
-            <Header backButton="/chat" />
-          </Route>
-          <Route exact path="/chat">
-            <Header backButton="/" />
-            <Chats />
-          </Route>
-          <Route exact path="/signout">
-            <SignOutView/>
-          </Route>
-          <Route exact path="/profile">
-            <Header backButton="/" />
-            <ProfileView/>
-          </Route>
-          <Route path="/u/:username">
-            <Header backButton="/" />
-            <PublicProfileView/>
-          </Route>
-          <Route exact path="/registration">
-            <Register/>
-          </Route>
-          <Route path="/login">
-            <LoginView/>
-          </Route>
-          <Route path="/">
-            <TinderCards />
-          </Route>
-        </Switch>
-      </BrowserRouter>,
+      <AuthProvider>
+        <ChatContextProvider>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </ChatContextProvider>
+      </AuthProvider>,
   document.getElementById('root')
 );
 

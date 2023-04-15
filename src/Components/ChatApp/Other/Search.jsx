@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   collection,
   query,
@@ -11,24 +11,22 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { database } from "src/Api/firebase";
-import AuthProvider from "src/Components/authProvider";
+import { AuthContext } from "src/Api/Context/authProvider";
+import Google from "src/Resources/img/google.png"
+import "./Search.css"
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 const Search = () => {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
-  const [currentUser, setCurrentUser] = useState({});
-  const [currentState, setCurrentState] = useState(0);
-
-  async function handleUserLoggedIn(user) {
-    setCurrentUser(user);
-    setCurrentState(2);
-  }
+  const { currentUser } = useContext(AuthContext);
 
   const handleSearch = async () => {
     const q = query(
       collection(database, "people"),
-      where("name", "==", username)
+      where("username", "==", username)
     );
 
     try {
@@ -42,9 +40,8 @@ const Search = () => {
   };
 
   const handleKey = (e) => {
-    e.code === "Enter" && handleSearch();
+    handleSearch();
   };
-
   const handleSelect = async () => {
     //check whether the group(chats in firestore) exists, if not create
     const combinedId =
@@ -57,13 +54,13 @@ const Search = () => {
       if (!res.exists()) {
         //create a chat in chats collection
         await setDoc(doc(database, "chats", combinedId), { messages: [] });
-
         //create user chats
         await updateDoc(doc(database, "userChats", currentUser.uid), {
           [combinedId + ".userInfo"]: {
             uid: user.uid,
+            username:user.username,
             name: user.name,
-            cardPicture: user.photoURL,
+            cardPicture: user.cardPicture,
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
@@ -71,6 +68,7 @@ const Search = () => {
         await updateDoc(doc(database, "userChats", user.uid), {
           [combinedId + ".userInfo"]: {
             uid: currentUser.uid,
+            username:currentUser.username,
             name: currentUser.name,
             cardPicture: currentUser.cardPicture,
           },
@@ -83,31 +81,37 @@ const Search = () => {
     setUsername("")
   };
 
-  if(currentState != 2){
-    return (<AuthProvider
-      onUserLoggedIn={handleUserLoggedIn}
-  ></AuthProvider>);
-  }
   return (
     <div className="search">
       <div className="searchForm">
         <input
           type="text"
           placeholder="Find a user"
-          onKeyDown={handleKey}
           onChange={(e) => setUsername(e.target.value)}
+          onKeyDown={handleKey}
           value={username}
         />
       </div>
-      {err && <span>User not found!</span>}
+      {err != false && <span>User not found!</span>}
       {user && (
-        <div className="userChat" onClick={handleSelect}>
-          <img src={user.cardPicture} alt="" />
+        <Link to={`/chat/${user.username}`}> 
+          <div className="userChat" onClick={handleSelect}>
+            <img className="userChat-img" src={user.cardPicture} alt="profile photo" />
+            <div className="userChatInfo">
+              <div className="userChatName">
+                <span>{user.name}</span>
+                <span>({user.username})</span>
+              </div>
+            </div>
+          </div>
+        </Link>
+      )}
+        <div className="userChat">
+          <img className="userChat-img" src={Google} alt="" />
           <div className="userChatInfo">
-            <span>{user.name}</span>
+            <span>nombre</span>
           </div>
         </div>
-      )}
     </div>
   );
 };

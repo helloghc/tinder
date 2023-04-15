@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import AuthProvider from "src/Components/authProvider";
+import AuthProvider from "src/Api/Context/authProvider";
 import { useHistory } from "react-router-dom";
 import "./Register.css";
 import { existUsername, updateUser, getProfilePhotoUrl, setUserProfilePhoto, database } from "src/Api/firebase";
@@ -9,6 +9,7 @@ import { useForm } from "src/Hooks/useForm";
 
 const initialForm = {
   name: "",
+  pet:"",
   username: "",
   city: "",
   raza: "",
@@ -23,30 +24,34 @@ const validationsForm = (form) => {
     let regexNumbers = /^[0-9]{8,13}$/;
 
     if(!form.name.trim()){
-        errors.name = "El campo Nombre es requerido";
+        errors.name = "Nombre es requerido";
     }else if(!regexName.test(form.name.trim())){
         errors.name = "Este campo solo admite letras y espacios";
     }
     
     if(!form.username.trim()){
       errors.username = "El campo Username es requerido";
-    }else if(!regexName.test(form.username.trim())){
-        errors.username = "Este campo solo admite letras y espacios";
+    }
+
+    if(!form.pet.trim()){
+      errors.pet = "Nombre de mascota es requerido";
+    }else if(!regexName.test(form.pet.trim())){
+        errors.pet = "Este campo solo admite letras y espacios";
     }
     
     if(!form.raza.trim()){
-        errors.raza = "El campo Raza es requerido";
+        errors.raza = "Raza es requerida";
     }else if(!regexName.test(form.raza.trim())){
         errors.raza = "Este campo solo admite letras y espacios";
     }
 
     if(!form.city.trim()){
-        errors.city = "El campo Ciudad es requerido";
+        errors.city = "Ciudad es requerida";
     }else if(!regexName.test(form.city.trim())){
         errors.city = "Este campo solo admite letras y espacios";
     }
     if(!form.edad.trim()){
-        errors.edad = "El campo Edad es requerido";
+        errors.edad = "Edad es requerida";
     }
 
     if(!form.vacuna.trim()){
@@ -98,6 +103,7 @@ const history = useHistory();
         tmp.cardPicture= profileUrl;
         tmp.name = form.name;
         tmp.username = form.username;
+        tmp.pet = form.pet;
         tmp.city = form.city;
         tmp.raza = form.raza;
         tmp.edad = form.edad;
@@ -152,8 +158,12 @@ const history = useHistory();
           <input ref={fileRef} type="file" style={{display: 'none'}} onChange={handleChangeFile} />
         </div>
         <div className="wrap">
-          <input type="text" name="username" placeholder="Nombre de tu Mascota" onChange={handleChange} onBlur={handleBlur} value={form.username} />
+          <input type="text" name="username" placeholder="Nombre de Usuario" onChange={handleChange} onBlur={handleBlur} value={form.username} />
           {errors.username && <p><strong className="error-form">{errors.username}</strong></p>}
+        </div>
+        <div className="wrap">
+          <input type="text" name="pet" placeholder="Nombre de tu Mascota" onChange={handleChange} onBlur={handleBlur} value={form.pet} />
+          {errors.pet && <p><strong className="error-form">{errors.pet}</strong></p>}
         </div>
         <div className="wrap">
           <input type="text" name="name" placeholder="Tu Nombre" onChange={handleChange} onBlur={handleBlur} value={form.name} required/>
