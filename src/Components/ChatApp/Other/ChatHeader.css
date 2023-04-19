@@ -1,9 +1,8 @@
 .ChatHeader {
     display:flex;
-    border-bottom: 1px solid #f9f9f9;
     align-items: center;
     background-color: #ff8c94;
-    font-size: 1rem;
+    font-size: 1.2rem;
     width: 100%;
 }
 
@@ -15,13 +14,14 @@
     cursor: pointer;
     padding: 20px 10px;
     font-weight: 600;
+    color: white;
 }
 .headerLinkTwo:hover{
-    background-color: #FF5864;
+    background-color: #f9666c;
     
 }
 .headerLinkthree:hover{
-    background-color: #FF5864;
+    background-color: #f9666c;
     
 }
 .infoContainer{

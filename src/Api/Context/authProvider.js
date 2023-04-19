@@ -9,7 +9,6 @@ export const AuthContext = createContext();
 export default function AuthProvider({ children, onUserLoggedIn, onUserNotLoggedIn, onUserNotRegistered }){
 
     const [currentUser, setCurrentUser] = useState({});
-    const history = useHistory();
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
@@ -44,7 +43,7 @@ export default function AuthProvider({ children, onUserLoggedIn, onUserNotLogged
             onUserNotLoggedIn();
           }
         });
-      } , [history, onUserLoggedIn, onUserNotLoggedIn, onUserNotRegistered]);
+      } , [onUserLoggedIn, onUserNotLoggedIn, onUserNotRegistered]);
     return (
       <AuthContext.Provider value={{ currentUser }}>
         {children}

@@ -4,7 +4,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { AuthContext } from "src/Api/Context/authProvider";
 import { ChatContext } from "src/Api/Context/ChatContext";
 import "./Search.css"
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Chatlist = () => {
     

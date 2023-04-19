@@ -11,7 +11,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { database } from "src/Api/firebase";
-import { AuthContext } from "src/Api/Context/authProvider";
+import AuthProvider, { AuthContext } from "src/Api/Context/authProvider";
 import Google from "src/Resources/img/google.png"
 import "./Search.css"
 import { useContext } from "react";
@@ -21,7 +21,13 @@ const Search = () => {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
-  const { currentUser } = useContext(AuthContext);
+  const [currentState, setCurrentState] = useState(0);
+  const [currentUser, setCurrentUser] = useState({});
+
+  async function handleUserLoggedIn(user) {
+    setCurrentUser(user);
+    setCurrentState(2);
+  }
 
   const handleSearch = async () => {
     const q = query(
@@ -54,7 +60,7 @@ const Search = () => {
       if (!res.exists()) {
         //create a chat in chats collection
         await setDoc(doc(database, "chats", combinedId), { messages: [] });
-        //create user chats
+        //create user chats       
         await updateDoc(doc(database, "userChats", currentUser.uid), {
           [combinedId + ".userInfo"]: {
             uid: user.uid,
@@ -64,13 +70,13 @@ const Search = () => {
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
-
-        await updateDoc(doc(database, "userChats", user.uid), {
+      } else {
+        await updateDoc(doc(database, "userChats", currentUser.uid), {
           [combinedId + ".userInfo"]: {
-            uid: currentUser.uid,
-            username:currentUser.username,
-            name: currentUser.name,
-            cardPicture: currentUser.cardPicture,
+            uid: user.uid,
+            username:user.username,
+            name: user.name,
+            cardPicture: user.cardPicture,
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
@@ -80,7 +86,11 @@ const Search = () => {
     setUser(null);
     setUsername("")
   };
-
+  if(currentState != 2){
+    return (<AuthProvider
+      onUserLoggedIn={handleUserLoggedIn}
+  ></AuthProvider>);
+};
   return (
     <div className="search">
       <div className="searchForm">
@@ -115,5 +125,4 @@ const Search = () => {
     </div>
   );
 };
-
 export default Search;

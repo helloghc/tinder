@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Img from "src/Resources/img/img.png";
 import Attach from "src/Resources/img/attach.png";
-import { AuthContext } from "src/Api/Context/authProvider";
+import AuthProvider, { AuthContext } from "src/Api/Context/authProvider";
 import { ChatContext } from "src/Api/Context/ChatContext";
 import {
   arrayUnion,
@@ -18,8 +18,13 @@ import "./Input.css"
 const Input = () => {
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
+  const [currentState, setCurrentState] = useState(0);
+  const [currentUser, setCurrentUser] = useState({});
 
-  const { currentUser } = useContext(AuthContext);
+  async function handleUserLoggedIn(user) {
+    setCurrentUser(user);
+    setCurrentState(2);
+  }
   const { data } = useContext(ChatContext);
 
   const handleSend = async () => {
@@ -45,7 +50,7 @@ const Input = () => {
           });
         }
       );
-    } else {
+    } else if (text != ""){
       await updateDoc(doc(database, "chats", data.chatId), {
         messages: arrayUnion({
           id: uuid(),
@@ -56,23 +61,38 @@ const Input = () => {
       });
     }
 
-    await updateDoc(doc(database, "userChats", currentUser.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
-      },
-      [data.chatId + ".date"]: serverTimestamp(),
-    });
-
-    await updateDoc(doc(database, "userChats", data.user.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
-      },
-      [data.chatId + ".date"]: serverTimestamp(),
-    });
+    if (text != "") {
+      await updateDoc(doc(database, "userChats", currentUser.uid), {
+        [data.chatId + ".lastMessage"]: {
+          text,
+        },
+        [data.chatId + ".date"]: serverTimestamp(),
+      });
+      await updateDoc(doc(database, "userChats", data.user.uid), {
+        [data.chatId + ".userInfo"]: {
+          uid: currentUser.uid,
+          username:currentUser.username,
+          name: currentUser.name,
+          cardPicture: currentUser.cardPicture,
+        },
+        [data.chatId + ".lastMessage"]: {
+          text,
+        },
+        [data.chatId + ".date"]: serverTimestamp(),
+        
+      });
+    }
 
     setText("");
     setImg(null);
   };
+
+  if(currentState != 2){
+    return (<AuthProvider
+      onUserLoggedIn={handleUserLoggedIn}
+  ></AuthProvider>);
+};
+
   return (
     <div className="input">
       <input
