@@ -59,3 +59,18 @@ body{
   color: #FF5864;
   font-weight: 600;
 }
+.sendMessage-container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.sendMessage{
+  width: 130px;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  background-color: white;
+  color: #FF5864;
+  font-weight: 600;
+}

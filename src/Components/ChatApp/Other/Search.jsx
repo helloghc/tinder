@@ -11,10 +11,8 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { database } from "src/Api/firebase";
-import AuthProvider, { AuthContext } from "src/Api/Context/authProvider";
-import Google from "src/Resources/img/google.png"
+import AuthProvider from "src/Api/Context/authProvider";
 import "./Search.css"
-import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 const Search = () => {
@@ -116,12 +114,6 @@ const Search = () => {
           </div>
         </Link>
       )}
-        <div className="userChat">
-          <img className="userChat-img" src={Google} alt="" />
-          <div className="userChatInfo">
-            <span>nombre</span>
-          </div>
-        </div>
     </div>
   );
 };

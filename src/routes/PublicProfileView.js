@@ -102,25 +102,29 @@ const PublicProfileView = () => {
     return <div>Username Doesn't exist</div>
   }
 
-  return  <div className="profile">
-            <div>
-              <h2>Profile</h2>
+  return  <div className="page-container">
+            <div className="profile">
+              <div className="description-labels"><h2>{profile?.profileInfo.username}</h2></div>
+              <div className="profile-img" >
+                <img src={url} alt="" />
+              </div>
+              <div className="description-contain">
+                <div>
+                  <h2>Mascota: {profile?.profileInfo.pet}</h2>
+                  <p>Dueño: {profile?.profileInfo.name}</p>
+                  <p>Raza: {profile?.profileInfo.raza}</p>
+                  <p>Edad: {profile?.profileInfo.edad}</p>
+                  <p>Vacunas: {profile?.profileInfo.vacuna}</p>
+                  <p>Ciudad: {profile?.profileInfo.city}</p>
+                </div>
+                <div className="sendMessage-container">
+                  <button className="sendMessage" onClick={handleSelect} > Enviar Mensaje </button>
+                </div>
+              </div>
             </div>
-            <div className="profile-img">
-              <img src={url} alt="" />
-            </div>
-            <div>
-              <h2>{profile?.profileInfo.username}</h2>
-              <p>Dueño: {profile?.profileInfo.name}</p>
-              <p>Raza: {profile?.profileInfo.raza}</p>
-              <p>Edad: {profile?.profileInfo.edad}</p>
-              <p>Vacunas: {profile?.profileInfo.vacuna}</p>
-              <p>Ciudad: {profile?.profileInfo.city}</p>
-            </div>
-            <div>
-              <button onClick={handleSelect} > Enviar Mensaje </button>
-            </div>
-          </div>;
+          </div>
+  
+  
 };
 
 export default PublicProfileView;
