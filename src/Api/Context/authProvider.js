@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min.js";
+import { useHistory } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { userExist, auth, registerNewUser, getUserInfo } from "../firebase.js";
 
@@ -27,14 +27,12 @@ export default function AuthProvider({ children, onUserLoggedIn, onUserNotLogged
             } else {
                 await registerNewUser({
                     uid: user.uid,
-                    name: '',
-                    pet: '',
-                    profilePicture:'',
-                    cardPicture:'',
+                    email: user.email,
+                    name: '' || user.displayName,
+                    profilePicture:'' || user.photoURL,
+                    cardPicture:'' || user.photoURL,
                     username:'',
                     city:'',
-                    raza:'',
-                    edad:'',
                     processCompleted: false,
                 });
                 onUserNotRegistered(user);
@@ -44,6 +42,7 @@ export default function AuthProvider({ children, onUserLoggedIn, onUserNotLogged
           }
         });
       } , [onUserLoggedIn, onUserNotLoggedIn, onUserNotRegistered]);
+
     return (
       <AuthContext.Provider value={{ currentUser }}>
         {children}

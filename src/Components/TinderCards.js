@@ -64,13 +64,9 @@ function TinderCards() {
               <div className="username"><h3>{user.username}</h3></div>
               <div className="description">
                 <div className="container-label-one">
-                  <div className="description-labels"><p className="data"><strong>{user.name}</strong></p></div>
-                  <div className="description-labels"><p className="data"><strong>Mascota: </strong>{user.pet}</p></div>
-                  <div className="description-labels"><p className="data"><strong>Raza: </strong>{user.raza}</p></div>
-                </div>
+                  <div className="description-labels"><p className="data"><strong>{user.name}</strong></p></div>               </div>
                 <div className="container-label-two">  
                   <div className="description-labels"><p className="data"><strong>Edad: </strong>{user.edad}</p></div>
-                  <div className="description-labels"><p className="data"><strong>Vacunas: </strong>{user.vacuna}</p></div>
                   <div className="description-labels"><p className="data"><strong>Ciudad: </strong>{user.city}</p></div>
                 </div>
               </div>

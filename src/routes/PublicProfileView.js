@@ -110,11 +110,8 @@ const PublicProfileView = () => {
               </div>
               <div className="description-contain">
                 <div>
-                  <h2>Mascota: {profile?.profileInfo.pet}</h2>
-                  <p>Dueño: {profile?.profileInfo.name}</p>
-                  <p>Raza: {profile?.profileInfo.raza}</p>
+                  <p>{profile?.profileInfo.name}</p>
                   <p>Edad: {profile?.profileInfo.edad}</p>
-                  <p>Vacunas: {profile?.profileInfo.vacuna}</p>
                   <p>Ciudad: {profile?.profileInfo.city}</p>
                 </div>
                 <div className="sendMessage-container">

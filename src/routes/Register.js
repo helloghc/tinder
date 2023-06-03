@@ -4,17 +4,19 @@ import { useHistory } from "react-router-dom";
 import "./Register.css";
 import { existUsername, updateUser, getProfilePhotoUrl, setUserProfilePhoto, database } from "src/Api/firebase";
 import { useForm } from "src/Hooks/useForm";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { serverTimestamp } from "firebase/firestore";
 
 
 
 const initialForm = {
   name: "",
-  pet:"",
+  lastName: "",
   username: "",
   city: "",
-  raza: "",
-  vacuna: "",
-  edad:"",
+  age: "",
+  date: "",
 };
 const validationsForm = (form) => {
   let errors = {};
@@ -28,21 +30,13 @@ const validationsForm = (form) => {
     }else if(!regexName.test(form.name.trim())){
         errors.name = "Este campo solo admite letras y espacios";
     }
-    
+    if(!form.lastName.trim()){
+      errors.lastName = "Nombre es requerido";
+    }else if(!regexName.test(form.lastName.trim())){
+        errors.lastName = "Este campo solo admite letras y espacios";
+    }
     if(!form.username.trim()){
       errors.username = "El campo Username es requerido";
-    }
-
-    if(!form.pet.trim()){
-      errors.pet = "Nombre de mascota es requerido";
-    }else if(!regexName.test(form.pet.trim())){
-        errors.pet = "Este campo solo admite letras y espacios";
-    }
-    
-    if(!form.raza.trim()){
-        errors.raza = "Raza es requerida";
-    }else if(!regexName.test(form.raza.trim())){
-        errors.raza = "Este campo solo admite letras y espacios";
     }
 
     if(!form.city.trim()){
@@ -50,14 +44,9 @@ const validationsForm = (form) => {
     }else if(!regexName.test(form.city.trim())){
         errors.city = "Este campo solo admite letras y espacios";
     }
-    if(!form.edad.trim()){
-        errors.edad = "Edad es requerida";
-    }
 
-    if(!form.vacuna.trim()){
-        errors.vacuna = "El campo Vacunas es requerido";
-    }else if(!regexName.test(form.vacuna.trim())){
-        errors.vacuna = "Este campo solo admite letras y espacios";
+    if(!form.age.trim()){
+        errors.age = "Edad es requerida";
     }
     return errors;
 };
@@ -74,6 +63,7 @@ const Register = () => {
   const [currentState, setCurrentState] = useState(0);
   const [currentUser, setCurrentUser] = useState({});
   const [profileUrl, setProfileUrl] = useState(null);
+  const [newDate, setNewDate] = useState(new Date ("2023","05","30"));
   const fileRef = useRef();
 
 const history = useHistory();
@@ -93,24 +83,30 @@ const history = useHistory();
     history.push('/login');
   }
 
-  async function handleContinue() {
+  
+  async function handleContinue(e) {
+    e.preventDefault();
     if ( form.username != "" ) {
       const exists = await existUsername(form.username);
       if(exists){
         setCurrentState(5);
       } else {
+        const birthDate = form.birthDate.split('/');
+        
         const tmp = {...currentUser};
         tmp.cardPicture= profileUrl;
+        tmp.each = (form.lastName[0] + form.lastName[1] + form.name[0] + birthDate[1] + birthDate[0] + birthDate[2]).toUpperCase();
         tmp.name = form.name;
+        tmp.lastName= form.lastName;
         tmp.username = form.username;
-        tmp.pet = form.pet;
         tmp.city = form.city;
-        tmp.raza = form.raza;
-        tmp.edad = form.edad;
-        tmp.vacuna = form.vacuna;
+        tmp.age = form.age;
+        tmp.birthDate = form.birthDate;
+        tmp.created = serverTimestamp();
         tmp.processCompleted = true;
         await updateUser(tmp);
         setCurrentState(6);
+        console.log(form.Name[0,1]);
       }
     }
   }
@@ -120,6 +116,7 @@ const history = useHistory();
       fileRef.current.click();
     }
   }
+
 
   function handleChangeFile(e){
     const files = e.target.files;
@@ -162,25 +159,17 @@ const history = useHistory();
           {errors.username && <p><strong className="error-form">{errors.username}</strong></p>}
         </div>
         <div className="wrap">
-          <input type="text" name="pet" placeholder="Nombre de tu Mascota" onChange={handleChange} onBlur={handleBlur} value={form.pet} />
-          {errors.pet && <p><strong className="error-form">{errors.pet}</strong></p>}
-        </div>
-        <div className="wrap">
           <input type="text" name="name" placeholder="Tu Nombre" onChange={handleChange} onBlur={handleBlur} value={form.name} required/>
           {errors.name && <p><strong  className="error-form">{errors.name}</strong></p>}
         </div>
         <div className="wrap">
-          <input type="text" name="raza" placeholder="Raza de tu Mascota" onChange={handleChange} onBlur={handleBlur} value={form.raza} required/>
-          {errors.raza && <p><strong className="error-form">{errors.raza}</strong></p>}
+          <input type="text" name="lastName" placeholder="Apellido" onChange={handleChange} onBlur={handleBlur} value={form.lastName} required/>
+          {errors.lastName && <p><strong  className="error-form">{errors.lastName}</strong></p>}
         </div>
         <div className="wrap">
-          <input type="text" name="edad" placeholder="Edad de tu Mascota" onChange={handleChange} onBlur={handleBlur} value={form.edad} required/>
-          {errors.edad && <p><strong className="error-form">{errors.edad}</strong></p>}
-        </div>        
-        <div className="wrap">
-          <input type="text" name="vacuna" placeholder="¿Que vacunas tíene tu Mascota?" onChange={handleChange} onBlur={handleBlur} value={form.vacuna} required/>
-          {errors.vacuna && <p><strong className="error-form">{errors.vacuna}</strong></p>}
-        </div>        
+          <p>Fecha de Nacimiento</p>
+          <input type="text" name="birthDate" placeholder="Dia/Mes/Año" onChange={handleChange} onBlur={handleBlur} value={form.birthDate} required/>
+        </div>       
         <div className="wrap">
           <input type="text" id="city" name="city" placeholder="Ciudad" onChange={handleChange} onBlur={handleBlur} value={form.city} required/>
           {errors.city && <p><strong className="error-form">{errors.city}</strong></p>}

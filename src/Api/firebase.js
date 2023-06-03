@@ -31,6 +31,12 @@ export async function userExist(uid){
     return res.exists();
 }
 
+export async function userChatsExist(uid){
+    const docRef = doc(database, 'userChats', uid);
+    const res = await getDoc(docRef)
+    return res.exists();
+}
+
 export async function existUsername(username){
     const users = [];
     const docsRef = collection(database, 'people');
@@ -44,6 +50,35 @@ export async function existUsername(username){
 
     return users.length > 0 ? users[0].uid : null;
 }
+export async function petExist(pet, uid){
+    const users = [];
+    const docsRef = doc(database, 'people', uid);
+    const q = query(docsRef, where('pet', '==', pet));
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(doc => {
+        users.push(doc.data());
+    });
+
+    return users.length > 0 ? users[0].uid : null;
+}
+
+export async function existEmail(email){
+    const users = [];
+    const docsRef = collection(database, 'people');
+    const q = query(docsRef, where('email', '==', email));
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(doc => {
+        users.push(doc.data());
+    });
+
+    return users.length > 0 ? users[0].uid : null;
+}
+
+
 
 export async function registerNewUser(user){
     try{
@@ -51,7 +86,7 @@ export async function registerNewUser(user){
         const docRef = doc(collectionRef, user.uid);
         await setDoc(docRef, user);
     }catch(error){
-
+        console.log(error)
     }
 }
 
@@ -85,7 +120,7 @@ export async function getUserInfo(uid){
 
 export async function setUserProfilePhoto(uid, file){
     try {
-        const imageRef = ref(storage, `images/${uid}`);
+        const imageRef = ref(storage, `images/${uid}/ProfilePhoto`);
         const resUpload = await uploadBytes(imageRef, file);
         return resUpload;
     } catch (error) {
@@ -93,11 +128,31 @@ export async function setUserProfilePhoto(uid, file){
     }
 }
 
+export async function uploadPetImages(uid, file, petName){
+    try {
+        const imageRef = ref(storage, `images/${uid}/pet/${petName}`);
+        const resUpload = await uploadBytes(imageRef, file);
+        return resUpload;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
 export async function getProfilePhotoUrl(profilePicture){
     try {
-        
-
         const imageRef = ref(storage, profilePicture);
+        const url = await getDownloadURL(imageRef);
+
+        return url
+    } catch (error) {
+        console.error(error);
+    }
+    
+}
+export async function getPetPhotoUrl(uid, petName){
+    try {
+        const imageRef = ref(storage, `images/${uid}/pet/${petName}`);
         const url = await getDownloadURL(imageRef);
 
         return url

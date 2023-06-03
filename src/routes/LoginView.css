@@ -28,6 +28,14 @@
   align-items: center;
   gap: 20px;
 }
+.form-container p{
+  color: grey;
+  font-size: 20px;
+  font-weight: 500;
+}
+.form-container p span{
+  color: rgb(47, 0, 255);
+}
 .form-container h1{
   color: #FF5864;
 }

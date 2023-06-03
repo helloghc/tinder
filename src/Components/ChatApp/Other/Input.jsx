@@ -34,6 +34,7 @@ const Input = () => {
 
       uploadTask.on(
         (error) => {
+          console.log(error)
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {

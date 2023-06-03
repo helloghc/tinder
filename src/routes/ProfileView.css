@@ -4,12 +4,14 @@ body{
 .page-container{
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .profile {
   position: relative;
   width: 400px;
   padding: 20px;
-  max-width: 85vw;
+  max-width: 50vh;
   color: white;
   border-radius: 20px;
   background-color: #FF5864;
@@ -42,6 +44,7 @@ body{
   justify-content: center;
   align-items: center;
   margin-top: 5vh;
+  
   gap: 20px;
 }
 .description-contain{

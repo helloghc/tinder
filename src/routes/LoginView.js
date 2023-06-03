@@ -2,10 +2,11 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom"
 import "./LoginView.css";
-import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { authForGoogle, userExist, auth, database } from "../Api/firebase.js";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider } from "firebase/auth";
+import { authForGoogle, userExist, auth, database, existEmail } from "../Api/firebase.js";
 import AuthProvider from "src/Api/Context/authProvider";
 import google from "../Resources/img/google.png"
+import facebook from "../Resources/img/facebook.webp"
 import { async } from "@firebase/util";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -35,7 +36,7 @@ const LoginView = (props) => {
 
   const logIn = (email, password) => {
     signInWithEmailAndPassword(auth, email, password).then((firebaseUser) => {
-      console.log("Sesión Iniciada con:", firebaseUser.email)
+      console.log("Sesión Iniciada con:", firebaseUser.user.email)
     })
   };
 
@@ -73,6 +74,21 @@ const LoginView = (props) => {
       console.error(error);
     }
   };
+  async function handleOnClickFb () {
+    const facebookProvider = new FacebookAuthProvider(); 
+    await signInWithFacebook(facebookProvider);
+  };
+
+  async function signInWithFacebook(facebookProvider){
+    try {
+      const res = await signInWithPopup(auth, facebookProvider);      
+      await setDoc(doc(database, "userChats", res.user.uid), {});
+      console.log(res);
+      
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   function handleUserLoggedIn(user) {
     history.push('/');
@@ -97,6 +113,7 @@ const LoginView = (props) => {
                 <div className="wrap">
                   <input type="password" id="passwordField" placeholder="Contraseña"></input>
                 </div>
+                <p>Olvidaste tu contraseña? <Link to='/reset-password'><span>Recupérala</span></Link></p>
                 <button className="button-session" type="submit">{isSignUp ? "Regístrate" : "Iniciar Sesión"}</button>
               </form>
               <button className="button-session2" onClick={() => setIsSignUp(!isSignUp)}>
@@ -105,6 +122,7 @@ const LoginView = (props) => {
               <div className="alt-options">
                 <p>También puedes</p>
                 <button onClick={handleOnClick}>Iniciar Sesión con Google <img src={google} alt="login con google"></img></button>
+                <button onClick={handleOnClickFb}>Iniciar Sesión con Facebook <img src={facebook} alt="login con facebook"></img></button>
               </div>
             </div>
           </div>;

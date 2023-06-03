@@ -10,8 +10,8 @@ import ProfileView from './routes/ProfileView';
 import PublicProfileView from './routes/PublicProfileView'
 import Register from './routes/Register';
 import Chat from './Components/ChatApp/Chat';
-import ChatHeader from './Components/ChatApp/Other/ChatHeader';
-
+import ForgotPassword from './routes/ForgotPasswordView';
+import AddPetView from './routes/AddPetView';
 
 function App() {
 
@@ -33,11 +33,17 @@ function App() {
             <Header backButton="/" />
             <PublicProfileView/>
           </Route>
+          <Route exact path="/add-pet">
+            <AddPetView/> 
+          </Route>
           <Route exact path="/registration">
             <Register/>
           </Route>
           <Route path="/login">
             <LoginView/>
+          </Route>
+          <Route path="/reset-password">
+            <ForgotPassword/>
           </Route>
           <Route path="/">
             <TinderCards />

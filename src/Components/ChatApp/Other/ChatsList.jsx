@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { database } from "src/Api/firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import AuthProvider from "src/Api/Context/authProvider";
 import { ChatContext } from "src/Api/Context/ChatContext";
 import "./Search.css"
 import { Link } from "react-router-dom";
+import { userChatsExist } from "src/Api/firebase";
 
 const Chatlist = () => {
     
@@ -19,6 +20,16 @@ const Chatlist = () => {
   }
 
     useEffect(() => {
+      async function exists(){ 
+        const exist = await userChatsExist(currentUser.uid); 
+        if (exist) {
+          console.log(currentUser)
+        } else {
+          await setDoc(doc(database, "userChats", currentUser.uid), {
+          });
+        }
+      }
+      
       const getChats = () => {
         const unsub = onSnapshot(doc(database, "userChats", currentUser.uid), (doc) => {
           setChats(doc.data());
@@ -29,7 +40,7 @@ const Chatlist = () => {
         };
       };
        
-      currentUser.uid && getChats();
+      currentUser.uid && exists() && getChats();
     }, [currentUser.uid]);
     const chatsLength = Object.keys(chats).length; 
     const handleSelect = (u) => {
@@ -41,6 +52,8 @@ const Chatlist = () => {
       onUserLoggedIn={handleUserLoggedIn}
   ></AuthProvider>);
 };
+
+
     if ( chatsLength > 0 ) {
       return (
         <div className="chats">

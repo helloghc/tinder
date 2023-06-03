@@ -1,9 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./ProfileView.css";
 import AuthProvider from "src/Api/Context/authProvider";
-import { Link, useHistory } from "react-router-dom";
-import { getProfilePhotoUrl, logout, setUserProfilePhoto, updateUser } from "src/Api/firebase";
-import { Sync } from "@material-ui/icons";
+import { useHistory } from "react-router-dom";
+import { database, getProfilePhotoUrl, logout, setUserProfilePhoto, updateUser } from "src/Api/firebase";
+import { deleteUser, getAuth } from "firebase/auth";
+import { Timestamp, doc, onSnapshot, collection } from "firebase/firestore";
 
 
 const ProfileView = () => {
@@ -12,7 +13,21 @@ const ProfileView = () => {
   const [currentState, setCurrentState] = useState(0);
   const [currentUser, setCurrentUser] = useState({});
   const [profileUrl, setProfileUrl] = useState(null);
+  const [pets, setPets] = useState([]);
   const fileRef = useRef();
+
+  useEffect(() => {
+    const unsubscribe = database
+        .collection('people')
+        .doc(currentUser.uid)
+        .collection('pet')
+        .onSnapshot((snapshot) =>
+    setPets(snapshot.docs.map((doc) => doc.data()))
+  );
+    return () => {
+      unsubscribe();
+    };
+  },[currentUser.uid])
 
   async function handleUserLoggedIn(user) {
     setCurrentUser(user);
@@ -20,7 +35,6 @@ const ProfileView = () => {
     setProfileUrl(url);
     setCurrentState(2);
   }
-
   function handleUserNotRegistered(user) {
     history.push('/login');
   }
@@ -63,6 +77,23 @@ const ProfileView = () => {
       }
     }
   }
+  function addpet(){
+    history.push('/add-pet')
+  }
+  async function deleteCurrentUser() {
+    const auth = getAuth()
+    const userToDelete = auth.currentUser;
+    deleteUser(userToDelete).then(() => {
+      console.log("user deleted")
+    }).catch((error) => {
+      console.log(error)
+    });
+  };
+  function userDoc(){
+    console.log(currentUser);
+    console.log(Timestamp.now());
+  }
+
   if(currentState != 2){
     return (<AuthProvider
       onUserLoggedIn={handleUserLoggedIn}
@@ -79,16 +110,31 @@ const ProfileView = () => {
                 <input ref={fileRef} type="file" style={{display: 'none'}} onChange={handleChangeFile} />
               </div>
               <div className="description-contain">
-                <div className="description-labels"><h3>Dueño: {currentUser.name}</h3></div>
-                <div className="description-labels"><h3>Raza: {currentUser.raza}</h3></div>
+                <div className="description-labels"><h3>{currentUser.name}</h3></div>
                 <div className="description-labels"><h3>Edad: {currentUser.edad}</h3></div>
-                <div className="description-labels"><h3>Edad: {currentUser.city}</h3></div>
+                <div className="description-labels"><h3>Ciudad: {currentUser.city}</h3></div>
+              </div>
+              <div>
+                <button className="signout" onClick={addpet} >Agregar Mascota</button>
               </div>
               <div>
                 <button className="signout" onClick={logout} >SignOut</button>
               </div>
+              <div>
+                <button className="signout" onClick={deleteCurrentUser} >Delete User</button>
+              </div>
+              <div>
+                <button className="signout" onClick={userDoc} >User</button>
+              </div>
             </div>
-            
+            {pets.map((pet)=>(
+              <div className="profile">
+                <div className="profile-img" id="insertProfilePic">
+                <img src={pet.petPhoto} alt={"Foto de "+ pet.petName} width={40}/>
+               </div>
+                <div>{pet.petName}</div>
+              </div>
+            ))}
           </div>
 
 };
