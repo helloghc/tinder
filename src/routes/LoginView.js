@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom"
 import "./LoginView.css";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider } from "firebase/auth";
+import {linkWithCredential, EmailAuthProvider, fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider, AuthCredential, OAuthProvider } from "firebase/auth";
 import { authForGoogle, userExist, auth, database, existEmail } from "../Api/firebase.js";
 import AuthProvider from "src/Api/Context/authProvider";
 import google from "../Resources/img/google.png"
@@ -78,15 +78,56 @@ const LoginView = (props) => {
     const facebookProvider = new FacebookAuthProvider(); 
     await signInWithFacebook(facebookProvider);
   };
-
+  var existingEmail = null;
+  var pendingCred = null;
   async function signInWithFacebook(facebookProvider){
     try {
-      const res = await signInWithPopup(auth, facebookProvider);      
-      await setDoc(doc(database, "userChats", res.user.uid), {});
-      console.log(res);
+      //const res = await signInWithPopup(auth, facebookProvider)
+      await signInWithPopup(auth, facebookProvider)
+      .then(async function(result) {
+        // Successful sign-in.
+        //await setDoc(doc(database, "userChats", res.user.uid), {});
+        //console.log(res);
+      })
+      .catch(async function(error) {
+        // Account exists with different credential. To recover both accounts
+        // have to be linked but the user must prove ownership of the original
+        // account.
+        if (error.code == 'auth/account-exists-with-different-credential') {
+          existingEmail = error.customData.email;
+          pendingCred = OAuthProvider.credentialFromError(error)
+          // Lookup existing account’s provider ID.
+          return fetchSignInMethodsForEmail(auth, existingEmail)
+            .then(async function(providers) {
+                if (providers.indexOf(EmailAuthProvider.PROVIDER_ID) != -1) {
+                 // Password account already exists with the same email.
+                 // Ask user to provide password associated with  that account.
+                 var password = window.prompt('Please provide the password for ' + existingEmail);
+                 return signInWithEmailAndPassword(existingEmail, password);    
+               } else if (providers.indexOf(GoogleAuthProvider.PROVIDER_ID) != -1) {
+                 var googProvider = new GoogleAuthProvider()
+                 // Sign in user to Google with same account.
+                 googProvider.setCustomParameters({'login_hint': existingEmail});
+                 return signInWithPopup(auth, googProvider).then(function(result) {
+                   return result.user;
+                 })
+               } else {
+                return 
+               }
+            })
+            .then(function(user) {
+              // Existing email/password or Google user signed in.
+              // Link Facebook OAuth credential to existing account.
+              return linkWithCredential(user, pendingCred);
+            });
+        }
+        throw error
+      });   
+      
       
     } catch (error) {
-      console.error(error);
+      console.log(error)
+      console.log(error.customData._tokenResponse.providerId)
     }
   };
 
