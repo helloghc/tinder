@@ -12,6 +12,8 @@ import Register from './routes/Register';
 import Chat from './Components/ChatApp/Chat';
 import ForgotPassword from './routes/ForgotPasswordView';
 import AddPetView from './routes/AddPetView';
+import DeleteUserView from './routes/Fx/DeleteUserView';
+import UploadImages from './routes/UploadImages';
 
 function App() {
 
@@ -36,8 +38,14 @@ function App() {
           <Route exact path="/add-pet">
             <AddPetView/> 
           </Route>
+          <Route exact path="/delete-user">
+            <DeleteUserView/> 
+          </Route>
           <Route exact path="/registration">
             <Register/>
+          </Route>
+          <Route exact path="/uploadImages">
+            <UploadImages/>
           </Route>
           <Route path="/login">
             <LoginView/>

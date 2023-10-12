@@ -2,8 +2,8 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom"
 import "./LoginView.css";
-import {linkWithCredential, EmailAuthProvider, fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider, AuthCredential, OAuthProvider } from "firebase/auth";
-import { authForGoogle, userExist, auth, database, existEmail } from "../Api/firebase.js";
+import {linkWithCredential, EmailAuthProvider, fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider, AuthCredential, OAuthProvider, signInWithRedirect, sendEmailVerification } from "firebase/auth";
+import { authForGoogle, userExist, auth, database, existEmail, updateUser } from "../Api/firebase.js";
 import AuthProvider from "src/Api/Context/authProvider";
 import google from "../Resources/img/google.png"
 import facebook from "../Resources/img/facebook.webp"
@@ -25,13 +25,18 @@ const LoginView = (props) => {
   */
   const [currentState, setCurrentState] = useState(0);
 
-  const [isSignUp, setIsSignUp] = React.useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const signUp = (email, password) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((firebaseUser) =>{
         console.log("Usuario Creado: ", firebaseUser);
+        sendEmailVerification(auth.currentUser).then(() => {
+          alert("Se ha enviado un correo de verificacion")
+          console.log("Verificando")
+        })
       });
+      
   };
 
   const logIn = (email, password) => {
@@ -82,12 +87,11 @@ const LoginView = (props) => {
   var pendingCred = null;
   async function signInWithFacebook(facebookProvider){
     try {
-      //const res = await signInWithPopup(auth, facebookProvider)
-      await signInWithPopup(auth, facebookProvider)
+      const res = await signInWithPopup(auth, facebookProvider)
       .then(async function(result) {
         // Successful sign-in.
-        //await setDoc(doc(database, "userChats", res.user.uid), {});
-        //console.log(res);
+        await setDoc(doc(database, "userChats", res.user.uid), {});
+        console.log(res);
       })
       .catch(async function(error) {
         // Account exists with different credential. To recover both accounts
@@ -99,19 +103,19 @@ const LoginView = (props) => {
           // Lookup existing account’s provider ID.
           return fetchSignInMethodsForEmail(auth, existingEmail)
             .then(async function(providers) {
-                if (providers.indexOf(EmailAuthProvider.PROVIDER_ID) != -1) {
-                 // Password account already exists with the same email.
-                 // Ask user to provide password associated with  that account.
-                 var password = window.prompt('Please provide the password for ' + existingEmail);
-                 return signInWithEmailAndPassword(existingEmail, password);    
-               } else if (providers.indexOf(GoogleAuthProvider.PROVIDER_ID) != -1) {
-                 var googProvider = new GoogleAuthProvider()
-                 // Sign in user to Google with same account.
-                 googProvider.setCustomParameters({'login_hint': existingEmail});
-                 return signInWithPopup(auth, googProvider).then(function(result) {
-                   return result.user;
-                 })
-               } else {
+              if (providers.indexOf(GoogleAuthProvider.PROVIDER_ID) != -1) {
+                var googProvider = new GoogleAuthProvider()
+                // Sign in user to Google with same account.
+                googProvider.setCustomParameters({'login_hint': existingEmail});
+                return signInWithRedirect(auth, googProvider).then(function(result) {
+                  return result.user;
+                })
+                } else if (providers.indexOf(EmailAuthProvider.PROVIDER_ID) != -1) {
+                  // Password account already exists with the same email.
+                  // Ask user to provide password associated with  that account.
+                  var password = window.prompt('Please provide the password for ' + existingEmail);
+                  return signInWithEmailAndPassword(existingEmail, password);    
+                } else {
                 return 
                }
             })
@@ -127,7 +131,7 @@ const LoginView = (props) => {
       
     } catch (error) {
       console.log(error)
-      console.log(error.customData._tokenResponse.providerId)
+      
     }
   };
 

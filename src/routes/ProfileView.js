@@ -3,7 +3,7 @@ import "./ProfileView.css";
 import AuthProvider from "src/Api/Context/authProvider";
 import { useHistory } from "react-router-dom";
 import { database, getProfilePhotoUrl, logout, setUserProfilePhoto, updateUser } from "src/Api/firebase";
-import { deleteUser, getAuth } from "firebase/auth";
+import { deleteUser, getAuth, sendSignInLinkToEmail } from "firebase/auth";
 import { Timestamp, doc, onSnapshot, collection } from "firebase/firestore";
 
 
@@ -15,6 +15,7 @@ const ProfileView = () => {
   const [profileUrl, setProfileUrl] = useState(null);
   const [pets, setPets] = useState([]);
   const fileRef = useRef();
+  const auth = getAuth()
 
   useEffect(() => {
     const unsubscribe = database
@@ -28,7 +29,7 @@ const ProfileView = () => {
       unsubscribe();
     };
   },[currentUser.uid])
-
+  
   async function handleUserLoggedIn(user) {
     setCurrentUser(user);
     const url = await getProfilePhotoUrl(user.profilePicture);
@@ -81,16 +82,10 @@ const ProfileView = () => {
     history.push('/add-pet')
   }
   async function deleteCurrentUser() {
-    const auth = getAuth()
-    const userToDelete = auth.currentUser;
-    deleteUser(userToDelete).then(() => {
-      console.log("user deleted")
-    }).catch((error) => {
-      console.log(error)
-    });
+    history.push('/delete-user')
   };
   function userDoc(){
-    console.log(currentUser);
+    console.log(auth.currentUser)
     console.log(Timestamp.now());
   }
 
@@ -133,7 +128,11 @@ const ProfileView = () => {
                 <img src={pet.petPhoto} alt={"Foto de "+ pet.petName} width={40}/>
                </div>
                 <div>{pet.petName}</div>
+                <div>
+                  <button className="signout" onClick="" >Convertir en principal</button>
+                </div>
               </div>
+              
             ))}
           </div>
 

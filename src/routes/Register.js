@@ -95,7 +95,7 @@ const history = useHistory();
         
         const tmp = {...currentUser};
         tmp.cardPicture= profileUrl;
-        tmp.each = (form.lastName[0] + form.lastName[1] + form.name[0] + birthDate[1] + birthDate[0] + birthDate[2]).toUpperCase();
+        tmp.identificador = (form.lastName[0] + form.lastName[1] + form.name[0] + birthDate[1] + birthDate[0] + birthDate[2]).toUpperCase();
         tmp.name = form.name;
         tmp.lastName= form.lastName;
         tmp.username = form.username;

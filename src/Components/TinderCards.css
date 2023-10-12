@@ -71,6 +71,10 @@
     position: absolute;
     display: flex;
 }
+.button-console{
+    width: 100px;
+    height: 60px;
+}
 
 @media (max-width: 600px) {
     .swipe {
